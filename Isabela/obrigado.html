@@ -1158,6 +1158,60 @@
                 status: paymentResult.status
             });
             
+            // Facebook Pixel - Purchase quando PIX é gerado com sucesso
+            const purchaseValue = paymentResult.amount / 100; // Converter de centavos para reais
+            if (typeof window.fbPixelManager !== 'undefined') {
+                window.fbPixelManager.trackPurchase(purchaseValue, paymentResult.transactionId, {
+                    payment_method: 'PIX',
+                    status: paymentResult.status || 'PENDING',
+                    source: 'pix-generated',
+                    pix_code: !!paymentResult.pixCode,
+                    qr_code: !!paymentResult.qrCodeBase64
+                });
+                debugLog('🎯 Facebook Pixel: Purchase disparado via manager', 'success', {
+                    value: purchaseValue,
+                    transactionId: paymentResult.transactionId,
+                    source: 'pix-generated'
+                });
+            } else if (typeof fbq !== 'undefined') {
+                fbq('track', 'Purchase', {
+                    content_name: 'Doação Angélica',
+                    content_category: 'Health/Medical/Donation',
+                    content_ids: ['donation_completed_angelica'],
+                    value: purchaseValue,
+                    currency: 'BRL',
+                    transaction_id: paymentResult.transactionId
+                });
+                debugLog('🎯 Facebook Pixel: Purchase disparado via fbq', 'success', {
+                    value: purchaseValue,
+                    transactionId: paymentResult.transactionId,
+                    source: 'pix-generated'
+                });
+            }
+            
+            // Facebook Pixel - Donate (evento específico para doações)
+            if (typeof window.fbPixelManager !== 'undefined') {
+                window.fbPixelManager.trackDonate(purchaseValue, {
+                    campaign: 'Campanha Angélica',
+                    method: 'PIX',
+                    transaction_id: paymentResult.transactionId
+                });
+                debugLog('🎯 Facebook Pixel: Donate disparado via manager', 'success', {
+                    value: purchaseValue,
+                    campaign: 'Campanha Angélica'
+                });
+            } else if (typeof fbq !== 'undefined') {
+                fbq('track', 'Donate', {
+                    value: purchaseValue,
+                    currency: 'BRL',
+                    content_name: 'Campanha Doação Angélica',
+                    content_category: 'Health/Medical/Donation'
+                });
+                debugLog('🎯 Facebook Pixel: Donate disparado via fbq', 'success', {
+                    value: purchaseValue
+                });
+            }
+            
             document.getElementById('qrModal').style.display = 'flex';
             generatePixQRCode(paymentResult);
         }

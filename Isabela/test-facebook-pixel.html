@@ -227,7 +227,9 @@
             
             if (typeof window.fbPixelManager !== 'undefined') {
                 const success = window.fbPixelManager.trackPurchase(50.00, testTransactionId, {
-                    payment_method: 'PIX'
+                    payment_method: 'PIX',
+                    status: 'PENDING',
+                    source: 'test-button'
                 });
                 
                 if (success) {
@@ -235,8 +237,18 @@
                 } else {
                     addLog('❌ Erro no Purchase');
                 }
+            } else if (typeof fbq !== 'undefined') {
+                fbq('track', 'Purchase', {
+                    content_name: 'Teste Doação Angélica',
+                    content_category: 'Health/Medical/Donation',
+                    content_ids: ['test_donation_completed'],
+                    value: 50.00,
+                    currency: 'BRL',
+                    transaction_id: testTransactionId
+                });
+                addLog(`✅ Purchase enviado via fbq (R$ 50,00) - ID: ${testTransactionId}`);
             } else {
-                addLog('❌ FacebookPixelManager não disponível');
+                addLog('❌ Erro: Nenhum método disponível');
             }
         }
 
@@ -245,16 +257,25 @@
             
             if (typeof window.fbPixelManager !== 'undefined') {
                 const success = window.fbPixelManager.trackDonate(75.00, {
-                    campaign: 'Teste Angélica'
+                    campaign: 'Teste Angélica',
+                    method: 'PIX'
                 });
                 
                 if (success) {
-                    addLog('✅ Donate enviado (R$ 75,00)');
+                    addLog('✅ Donate enviado via manager (R$ 75,00)');
                 } else {
-                    addLog('❌ Erro no Donate');
+                    addLog('❌ Erro no FacebookPixelManager');
                 }
+            } else if (typeof fbq !== 'undefined') {
+                fbq('track', 'Donate', {
+                    value: 75.00,
+                    currency: 'BRL',
+                    content_name: 'Teste Campanha Angélica',
+                    content_category: 'Health/Medical/Donation'
+                });
+                addLog('✅ Donate enviado via fbq (R$ 75,00)');
             } else {
-                addLog('❌ FacebookPixelManager não disponível');
+                addLog('❌ Erro: Nenhum método disponível');
             }
         }
 
