@@ -54,7 +54,7 @@
         }
 
         .container {
-            max-width: 600px;
+            max-width: 500px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -62,16 +62,17 @@
         .campaign-header {
             background: white;
             border-radius: 12px;
-            padding: 24px;
-            margin-bottom: 24px;
+            padding: 20px;
+            margin-bottom: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .campaign-title {
-            font-size: 24px;
-            font-weight: 600;
+            font-size: 28px;
+            font-weight: 700;
             color: #333;
             margin-bottom: 8px;
+            line-height: 1.2;
         }
 
         .campaign-id {
@@ -83,12 +84,12 @@
         .payment-container {
             background: white;
             border-radius: 12px;
-            padding: 24px;
+            padding: 20px;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
         .amount-section {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .amount-label {
@@ -132,8 +133,63 @@
             margin-bottom: 20px;
         }
 
+        .addons-section {
+            margin-bottom: 20px;
+        }
+
+        .addons-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .addon-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .addon-card {
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .addon-card:hover {
+            border-color: #24ca68;
+            background: #f0f9f3;
+        }
+
+        .addon-card.selected {
+            border-color: #24ca68;
+            background: #f0f9f3;
+        }
+
+        .addon-icon {
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .addon-name {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .addon-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: #24ca68;
+        }
+
         .payment-method {
-            margin-bottom: 24px;
+            margin-bottom: 20px;
         }
 
         .payment-method h3 {
@@ -149,7 +205,8 @@
             padding: 12px 16px;
             border: 2px solid #24ca68;
             border-radius: 8px;
-            background: #f0f9f3;
+            background: #24ca68;
+            color: white;
         }
 
         .pix-radio {
@@ -175,69 +232,17 @@
 
         .pix-text {
             font-weight: 600;
-            color: #24ca68;
+            color: white;
         }
 
-        .addons-section {
-            margin-bottom: 24px;
-        }
 
-        .addons-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 16px;
-        }
 
-        .addon-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 16px;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
 
-        .addon-item:hover {
-            border-color: #24ca68;
-            background: #f9f9f9;
-        }
-
-        .addon-info {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .addon-icon {
-            width: 40px;
-            height: 40px;
-            background: #f0f0f0;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-        }
-
-        .addon-details h4 {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 2px;
-        }
-
-        .addon-price {
-            font-size: 14px;
-            font-weight: 600;
-            color: #24ca68;
-        }
 
         .totals {
             border-top: 1px solid #e0e0e0;
-            padding-top: 20px;
-            margin-bottom: 24px;
+            padding-top: 16px;
+            margin-bottom: 20px;
         }
 
         .total-row {
@@ -258,12 +263,14 @@
             background: #24ca68;
             color: white;
             border: none;
-            padding: 16px;
+            padding: 18px;
             border-radius: 8px;
-            font-size: 16px;
-            font-weight: 600;
+            font-size: 18px;
+            font-weight: 700;
             cursor: pointer;
             transition: background 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .contribute-btn:hover {
@@ -509,7 +516,7 @@
                     <span class="currency-symbol">R$</span>
                     <input type="text" class="amount-input" id="donationAmount" value="0,00" placeholder="0,00">
                 </div>
-                <div class="min-amount">Valor mínimo da doação é de R$ 5,00</div>
+                <div class="min-amount">Valor mínimo da doação é de R$ 20,00</div>
             </div>
 
             <div class="payment-method">
@@ -523,34 +530,24 @@
             <div class="addons-section">
                 <h3 class="addons-title">Turbine sua doação</h3>
                 
-                <div class="addon-item" data-value="10.00">
-                    <div class="addon-info">
+                <div class="addon-cards">
+                    <div class="addon-card" data-value="10.00">
                         <div class="addon-icon">🚗</div>
-                        <div class="addon-details">
-                            <h4>Auxílio transporte</h4>
-                        </div>
+                        <div class="addon-name">Auxílio transporte</div>
+                        <div class="addon-price">R$ 10,00</div>
                     </div>
-                    <div class="addon-price">R$ 10,00</div>
-                </div>
 
-                <div class="addon-item" data-value="15.00">
-                    <div class="addon-info">
+                    <div class="addon-card" data-value="15.00">
                         <div class="addon-icon">🍽️</div>
-                        <div class="addon-details">
-                            <h4>Auxílio Refeição</h4>
-                        </div>
+                        <div class="addon-name">Auxílio Refeição</div>
+                        <div class="addon-price">R$ 15,00</div>
                     </div>
-                    <div class="addon-price">R$ 15,00</div>
-                </div>
 
-                <div class="addon-item" data-value="85.00">
-                    <div class="addon-info">
+                    <div class="addon-card" data-value="85.00">
                         <div class="addon-icon">🛒</div>
-                        <div class="addon-details">
-                            <h4>Doar Cesta Básica</h4>
-                        </div>
+                        <div class="addon-name">Doar Cesta Básica</div>
+                        <div class="addon-price">R$ 85,00</div>
                     </div>
-                    <div class="addon-price">R$ 85,00</div>
                 </div>
             </div>
 
@@ -867,15 +864,14 @@
         });
 
         // Seleção de add-ons
-        document.querySelectorAll('.addon-item').forEach(item => {
+        document.querySelectorAll('.addon-card').forEach(item => {
             item.addEventListener('click', function() {
                 const value = parseFloat(this.dataset.value);
-                const addonName = this.querySelector('h4').textContent;
+                const addonName = this.querySelector('.addon-name').textContent;
                 
                 if (selectedAddons.has(value)) {
                     selectedAddons.delete(value);
-                    this.style.background = '';
-                    this.style.borderColor = '#e0e0e0';
+                    this.classList.remove('selected');
                     debugLog('❌ Add-on removido', 'debug', {
                         addonName: addonName,
                         value: value,
@@ -883,8 +879,7 @@
                     });
                 } else {
                     selectedAddons.add(value);
-                    this.style.background = '#f0f9f3';
-                    this.style.borderColor = '#24ca68';
+                    this.classList.add('selected');
                     debugLog('✅ Add-on adicionado', 'debug', {
                         addonName: addonName,
                         value: value,
@@ -922,12 +917,12 @@
                 selectedAddonsValues: Array.from(selectedAddons)
             });
             
-                         if (total < 5) {
+                         if (total < 20) {
                 debugLog('❌ Valor mínimo não atingido', 'warning', {
                     total: total,
-                                         minimum: 5
+                    minimum: 20
                 });
-                                 alert('O valor mínimo da doação é de R$ 5,00');
+                alert('O valor mínimo da doação é de R$ 20,00');
                 return;
             }
 

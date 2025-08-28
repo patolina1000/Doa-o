@@ -43,14 +43,16 @@ const RUSHPAY_CONFIG = {
 ```
 
 ### 2. Webhook URL
-Após o deploy no Vercel, atualize a URL do webhook:
+Após o deploy no Vercel, atualize a URL do webhook no arquivo `Isabela/js/rushpay-config.js`:
 
 ```javascript
 WEBHOOK: {
-    url: 'https://seu-projeto.vercel.app/webhook/angelica',
+    url: 'https://angelica-angelica.vercel.app/webhook/angelica',
     // ...
 }
 ```
+
+**✅ URL já configurada corretamente para seu projeto!**
 
 ## 🎯 Funcionalidades
 

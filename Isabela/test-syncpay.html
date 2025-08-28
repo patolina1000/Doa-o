@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste API SyncPay</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h1 {
+            color: #24ca68;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #24ca68;
+        }
+        
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        button {
+            background: #24ca68;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+        
+        button:hover {
+            background: #20b85e;
+        }
+        
+        button:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+        
+        .log-container {
+            background: #000;
+            color: #00ff00;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            max-height: 400px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+        
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .info {
+            color: #17a2b8;
+        }
+        
+        .credentials {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+        }
+        
+        .credentials strong {
+            color: #495057;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 Teste API SyncPay</h1>
+        
+        <div class="credentials">
+            <strong>Credenciais Configuradas:</strong><br>
+            <span id="clientIdDisplay">Carregando...</span><br>
+            <span id="clientSecretDisplay">Carregando...</span><br>
+            <span id="sandboxDisplay">Carregando...</span>
+        </div>
+        
+        <div class="test-section">
+            <h3>1. Teste de Conectividade</h3>
+            <p>Verifica se consegue conectar com as APIs SyncPay.</p>
+            <button onclick="testConnectivity()">Testar Conectividade</button>
+            <span id="connectivityStatus"></span>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. Teste de Autenticação</h3>
+            <p>Testa se as credenciais estão corretas e conseguem gerar um token.</p>
+            <button onclick="testAuthentication()">Testar Autenticação</button>
+            <span id="authStatus"></span>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. Teste de Cobrança PIX</h3>
+            <p>Cria uma cobrança PIX de teste no valor de R$ 25,00.</p>
+            <button onclick="testPixPayment()" id="pixTestBtn">Testar Cobrança PIX</button>
+            <span id="pixStatus"></span>
+        </div>
+        
+        <div class="test-section">
+            <h3>4. Teste Completo (Doação)</h3>
+            <p>Simula uma doação completa com add-ons.</p>
+            <button onclick="testCompleteDonation()" id="donationTestBtn">Testar Doação Completa</button>
+            <span id="donationStatus"></span>
+        </div>
+        
+        <div class="log-container" id="logContainer">
+            <div>📋 Console de testes - aguardando comandos...</div>
+        </div>
+    </div>
+
+    <script src="js/syncpay-config.js"></script>
+    <script src="js/syncpay-integration.js"></script>
+    
+    <script>
+        let campaignPayments = null;
+        
+        // Inicializar na carga da página
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeTest();
+        });
+        
+        function initializeTest() {
+            try {
+                // Mostrar credenciais
+                const config = getSyncPayConfig();
+                document.getElementById('clientIdDisplay').textContent = `Client ID: ${config.CLIENT_ID.substring(0, 8)}...`;
+                document.getElementById('clientSecretDisplay').textContent = `Client Secret: ${config.CLIENT_SECRET.substring(0, 8)}...`;
+                document.getElementById('sandboxDisplay').textContent = `Sandbox: ${config.SANDBOX ? 'SIM' : 'NÃO'}`;
+                
+                // Inicializar sistema de pagamentos
+                campaignPayments = new IsabelaCampaignPayments();
+                logMessage('✅ Sistema de testes inicializado', 'success');
+                
+            } catch (error) {
+                logMessage('❌ Erro na inicialização: ' + error.message, 'error');
+            }
+        }
+        
+        async function testConnectivity() {
+            logMessage('🌐 Iniciando teste de conectividade...', 'info');
+            const statusEl = document.getElementById('connectivityStatus');
+            
+            try {
+                statusEl.textContent = '⏳ Testando...';
+                statusEl.className = 'info';
+                
+                const result = await campaignPayments.syncPay.testConnectivity();
+                
+                if (result) {
+                    logMessage(`✅ Conectividade OK: ${result.url}${result.endpoint}`, 'success');
+                    logMessage(`Status: ${result.status}`, 'info');
+                    statusEl.textContent = '✅ Conectado';
+                    statusEl.className = 'success';
+                } else {
+                    logMessage('⚠️ Nenhuma API acessível, mas continuando com mock', 'info');
+                    statusEl.textContent = '⚠️ Mock Mode';
+                    statusEl.className = 'info';
+                }
+                
+            } catch (error) {
+                logMessage('❌ Erro na conectividade: ' + error.message, 'error');
+                statusEl.textContent = '❌ Falha';
+                statusEl.className = 'error';
+            }
+        }
+        
+        async function testAuthentication() {
+            logMessage('🔐 Iniciando teste de autenticação...', 'info');
+            const statusEl = document.getElementById('authStatus');
+            
+            try {
+                statusEl.textContent = '⏳ Testando...';
+                statusEl.className = 'info';
+                
+                const token = await campaignPayments.syncPay.generateToken();
+                
+                if (token) {
+                    const isMock = token.startsWith('mock_token');
+                    logMessage(`✅ Token obtido: ${token.substring(0, 20)}...`, 'success');
+                    
+                    if (isMock) {
+                        logMessage('ℹ️ Usando token mock (API real não acessível)', 'info');
+                        statusEl.textContent = '✅ Mock Token';
+                        statusEl.className = 'info';
+                    } else {
+                        logMessage('🎉 Token real da API SyncPay!', 'success');
+                        statusEl.textContent = '✅ Token Real';
+                        statusEl.className = 'success';
+                    }
+                } else {
+                    throw new Error('Token não gerado');
+                }
+                
+            } catch (error) {
+                logMessage('❌ Erro na autenticação: ' + error.message, 'error');
+                statusEl.textContent = '❌ Falha';
+                statusEl.className = 'error';
+            }
+        }
+        
+        async function testPixPayment() {
+            logMessage('💳 Iniciando teste de cobrança PIX...', 'info');
+            const statusEl = document.getElementById('pixStatus');
+            const btnEl = document.getElementById('pixTestBtn');
+            
+            try {
+                statusEl.textContent = '⏳ Criando cobrança...';
+                statusEl.className = 'info';
+                btnEl.disabled = true;
+                
+                const paymentData = {
+                    amount: 25.00,
+                    customer: {
+                        name: 'Teste SyncPay',
+                        email: 'teste@exemplo.com',
+                        cpf: '12345678901'
+                    },
+                    webhookUrl: window.location.origin + '/webhook/teste'
+                };
+                
+                const result = await campaignPayments.syncPay.createPixPayment(paymentData);
+                
+                if (result.success) {
+                    logMessage('✅ Cobrança PIX criada com sucesso!', 'success');
+                    logMessage(`Transaction ID: ${result.transactionId}`, 'info');
+                    logMessage(`PIX Code: ${result.pixCode.substring(0, 50)}...`, 'info');
+                    
+                    if (result.qrCodeBase64) {
+                        logMessage('📱 QR Code Base64 recebido', 'success');
+                    }
+                    
+                    statusEl.textContent = '✅ Sucesso';
+                    statusEl.className = 'success';
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                logMessage('❌ Erro na cobrança PIX: ' + error.message, 'error');
+                statusEl.textContent = '❌ Falha';
+                statusEl.className = 'error';
+            } finally {
+                btnEl.disabled = false;
+            }
+        }
+        
+        async function testCompleteDonation() {
+            logMessage('🎯 Iniciando teste de doação completa...', 'info');
+            const statusEl = document.getElementById('donationStatus');
+            const btnEl = document.getElementById('donationTestBtn');
+            
+            try {
+                statusEl.textContent = '⏳ Processando doação...';
+                statusEl.className = 'info';
+                btnEl.disabled = true;
+                
+                // Simular doação com add-ons
+                const baseAmount = 50.00;
+                const selectedAddons = [
+                    { value: 10.00, name: 'Auxílio transporte', beneficiaryId: 'transport_fund' },
+                    { value: 15.00, name: 'Auxílio Refeição', beneficiaryId: 'meal_fund' }
+                ];
+                
+                const customerData = {
+                    name: 'Doador Teste',
+                    email: 'doador@teste.com',
+                    cpf: '98765432100'
+                };
+                
+                logMessage(`💰 Valor base: R$ ${baseAmount.toFixed(2)}`, 'info');
+                logMessage(`🎁 Add-ons: ${selectedAddons.length} itens`, 'info');
+                
+                const result = await campaignPayments.processDonation(baseAmount, selectedAddons, customerData);
+                
+                if (result.success) {
+                    logMessage('🎉 Doação processada com sucesso!', 'success');
+                    logMessage(`Valor total: R$ ${result.amount.toFixed(2)}`, 'success');
+                    logMessage(`Transaction ID: ${result.transactionId}`, 'info');
+                    
+                    statusEl.textContent = '✅ Sucesso';
+                    statusEl.className = 'success';
+                } else {
+                    throw new Error(result.error);
+                }
+                
+            } catch (error) {
+                logMessage('❌ Erro na doação: ' + error.message, 'error');
+                statusEl.textContent = '❌ Falha';
+                statusEl.className = 'error';
+            } finally {
+                btnEl.disabled = false;
+            }
+        }
+        
+        function logMessage(message, type = 'info') {
+            const logContainer = document.getElementById('logContainer');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.className = type;
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            
+            logContainer.appendChild(logEntry);
+            logContainer.scrollTop = logContainer.scrollHeight;
+            
+            // Também logar no console do navegador
+            console.log(`[SyncPay Test] ${message}`);
+        }
+    </script>
+</body>
+</html>

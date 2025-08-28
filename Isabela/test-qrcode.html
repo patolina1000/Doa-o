@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste QR Code - RushPay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .qr-display {
+            text-align: center;
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px dashed #ddd;
+            border-radius: 10px;
+        }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste QR Code - RushPay</h1>
+        <p>Este arquivo testa especificamente a funcionalidade de geração de QR Code.</p>
+
+        <div class="test-section info">
+            <h3>📋 Status da Biblioteca</h3>
+            <p><strong>QRCode Library:</strong> <span id="qrStatus">Verificando...</span></p>
+            <p><strong>Versão:</strong> <span id="qrVersion">Verificando...</span></p>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Testes de QR Code</h3>
+            <button onclick="testQRCodeLibrary()">1. Testar Biblioteca QRCode</button>
+            <button onclick="testQRCodeGeneration()">2. Gerar QR Code de Teste</button>
+            <button onclick="testPixQRCode()">3. Testar QR Code PIX</button>
+            <button onclick="clearLog()">🧹 Limpar Log</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📱 QR Code Gerado</h3>
+            <div id="qrCodeDisplay" class="qr-display">
+                <p>QR Code aparecerá aqui...</p>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Log de Testes</h3>
+            <div id="log" class="log"></div>
+        </div>
+    </div>
+
+    <!-- Carregar biblioteca QRCode -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    
+    <script>
+        let testLog = [];
+
+        // Função para adicionar log
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            testLog.push(logEntry);
+            
+            const logElement = document.getElementById('log');
+            logElement.textContent = testLog.join('\n');
+            logElement.scrollTop = logElement.scrollHeight;
+            
+            console.log(logEntry);
+        }
+
+        // Função para limpar log
+        function clearLog() {
+            testLog = [];
+            document.getElementById('log').textContent = '';
+        }
+
+        // Função para testar biblioteca QRCode
+        function testQRCodeLibrary() {
+            addLog('🔍 Testando biblioteca QRCode...');
+            
+            try {
+                if (typeof QRCode === 'undefined') {
+                    addLog('❌ Biblioteca QRCode não encontrada', 'error');
+                    document.getElementById('qrStatus').textContent = '❌ Não carregada';
+                    document.getElementById('qrVersion').textContent = 'N/A';
+                    return;
+                }
+
+                addLog('✅ Biblioteca QRCode encontrada');
+                document.getElementById('qrStatus').textContent = '✅ Carregada';
+                
+                // Tentar detectar versão
+                if (QRCode.version) {
+                    document.getElementById('qrVersion').textContent = QRCode.version;
+                    addLog(`📦 Versão detectada: ${QRCode.version}`);
+                } else {
+                    document.getElementById('qrVersion').textContent = '1.5.3 (estimada)';
+                    addLog('📦 Versão estimada: 1.5.3');
+                }
+
+                // Testar métodos disponíveis
+                const methods = ['toCanvas', 'toDataURL', 'toString'];
+                methods.forEach(method => {
+                    if (typeof QRCode[method] === 'function') {
+                        addLog(`✅ Método ${method} disponível`);
+                    } else {
+                        addLog(`❌ Método ${method} não disponível`, 'error');
+                    }
+                });
+
+            } catch (error) {
+                addLog(`❌ Erro ao testar biblioteca: ${error.message}`, 'error');
+            }
+        }
+
+        // Função para gerar QR Code de teste
+        async function testQRCodeGeneration() {
+            addLog('🎨 Gerando QR Code de teste...');
+            
+            try {
+                const testData = 'https://www.google.com';
+                const qrContainer = document.getElementById('qrCodeDisplay');
+                
+                addLog(`📝 Dados de teste: ${testData}`);
+                
+                // Gerar QR Code usando toCanvas
+                const canvas = await QRCode.toCanvas(testData, {
+                    width: 200,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                });
+                
+                qrContainer.innerHTML = '';
+                qrContainer.appendChild(canvas);
+                
+                addLog('✅ QR Code gerado com sucesso usando toCanvas');
+                
+            } catch (error) {
+                addLog(`❌ Erro ao gerar QR Code: ${error.message}`, 'error');
+                document.getElementById('qrCodeDisplay').innerHTML = '<div style="color: #e74c3c;">Erro ao gerar QR Code</div>';
+            }
+        }
+
+        // Função para testar QR Code PIX
+        async function testPixQRCode() {
+            addLog('💳 Testando QR Code PIX...');
+            
+            try {
+                // Código PIX de exemplo
+                const pixCode = '00020126580014br.gov.bcb.pix0136123e4567-e12b-12d1-a456-426614174000520400005303986540510.005802BR5913Teste Empresa6008Brasilia62070503***6304E2CA';
+                
+                addLog(`📝 Código PIX de teste: ${pixCode.substring(0, 50)}...`);
+                
+                const qrContainer = document.getElementById('qrCodeDisplay');
+                
+                // Gerar QR Code PIX
+                const canvas = await QRCode.toCanvas(pixCode, {
+                    width: 200,
+                    margin: 2,
+                    color: {
+                        dark: '#000000',
+                        light: '#FFFFFF'
+                    }
+                });
+                
+                qrContainer.innerHTML = '';
+                qrContainer.appendChild(canvas);
+                
+                addLog('✅ QR Code PIX gerado com sucesso');
+                
+            } catch (error) {
+                addLog(`❌ Erro ao gerar QR Code PIX: ${error.message}`, 'error');
+                
+                // Tentar fallback
+                try {
+                    addLog('🔄 Tentando fallback externo...');
+                    const pixCode = '00020126580014br.gov.bcb.pix0136123e4567-e12b-12d1-a456-426614174000520400005303986540510.005802BR5913Teste Empresa6008Brasilia62070503***6304E2CA';
+                    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixCode)}`;
+                    document.getElementById('qrCodeDisplay').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code PIX" style="width: 200px; height: 200px;">`;
+                    addLog('✅ Fallback externo funcionou');
+                } catch (fallbackError) {
+                    addLog(`❌ Fallback também falhou: ${fallbackError.message}`, 'error');
+                    document.getElementById('qrCodeDisplay').innerHTML = '<div style="color: #e74c3c;">Erro ao gerar QR Code PIX</div>';
+                }
+            }
+        }
+
+        // Inicialização
+        window.addEventListener('load', function() {
+            addLog('🚀 Página carregada, verificando biblioteca QRCode...');
+            
+            // Verificar se a biblioteca foi carregada
+            setTimeout(() => {
+                if (typeof QRCode !== 'undefined') {
+                    addLog('✅ Biblioteca QRCode carregada automaticamente');
+                    document.getElementById('qrStatus').textContent = '✅ Carregada';
+                    document.getElementById('qrVersion').textContent = '1.5.3';
+                } else {
+                    addLog('❌ Biblioteca QRCode não carregada automaticamente', 'error');
+                    document.getElementById('qrStatus').textContent = '❌ Não carregada';
+                    document.getElementById('qrVersion').textContent = 'N/A';
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

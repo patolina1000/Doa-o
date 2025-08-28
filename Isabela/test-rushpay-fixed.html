@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste RushPay - Corrigido</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .success { background-color: #d4edda; border-color: #c3e6cb; }
+        .error { background-color: #f8d7da; border-color: #f5c6cb; }
+        .info { background-color: #d1ecf1; border-color: #bee5eb; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        button:disabled { background: #6c757d; cursor: not-allowed; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste RushPay - Corrigido</h1>
+        <p>Este arquivo testa as correções implementadas no sistema RushPay.</p>
+
+        <div class="test-section info">
+            <h3>📋 Configuração Atual</h3>
+            <p><strong>URL da API:</strong> <span id="apiUrl">Carregando...</span></p>
+            <p><strong>Modo:</strong> <span id="mode">Carregando...</span></p>
+            <p><strong>Credenciais:</strong> <span id="credentials">Carregando...</span></p>
+            <p><strong>Webhook:</strong> <span id="webhook">Carregando...</span></p>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Testes Disponíveis</h3>
+            <button onclick="testConfig()">1. Testar Configuração</button>
+            <button onclick="testConnectivity()">2. Testar Conectividade</button>
+            <button onclick="testTransaction()">3. Testar Transação PIX</button>
+            <button onclick="clearLog()">🧹 Limpar Log</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Log de Testes</h3>
+            <div id="log" class="log"></div>
+        </div>
+    </div>
+
+    <!-- Carregar configurações -->
+    <script src="js/rushpay-config.js"></script>
+    <script src="js/rushpay-integration.js"></script>
+    
+    <script>
+        let campaignPayments;
+        let testLog = [];
+
+        // Função para adicionar log
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${type.toUpperCase()}: ${message}`;
+            testLog.push(logEntry);
+            
+            const logElement = document.getElementById('log');
+            logElement.textContent = testLog.join('\n');
+            logElement.scrollTop = logElement.scrollHeight;
+            
+            console.log(logEntry);
+        }
+
+        // Função para limpar log
+        function clearLog() {
+            testLog = [];
+            document.getElementById('log').textContent = '';
+        }
+
+        // Função para testar configuração
+        async function testConfig() {
+            addLog('🔍 Iniciando teste de configuração...');
+            
+            try {
+                // Verificar se as configurações estão carregadas
+                if (typeof RUSHPAY_CONFIG === 'undefined') {
+                    throw new Error('RUSHPAY_CONFIG não encontrado');
+                }
+                addLog('✅ RUSHPAY_CONFIG carregado');
+
+                // Verificar credenciais
+                if (!RUSHPAY_CONFIG.PUBLIC_KEY || !RUSHPAY_CONFIG.SECRET_KEY) {
+                    throw new Error('Credenciais não configuradas');
+                }
+                addLog('✅ Credenciais configuradas');
+
+                // Verificar URL
+                const baseUrl = RUSHPAY_CONFIG.SANDBOX ? RUSHPAY_CONFIG.SANDBOX_URL : RUSHPAY_CONFIG.PRODUCTION_URL;
+                addLog(`✅ URL da API: ${baseUrl}`);
+
+                // Verificar webhook
+                if (!RUSHPAY_CONFIG.WEBHOOK.url) {
+                    throw new Error('URL do webhook não configurada');
+                }
+                addLog(`✅ Webhook configurado: ${RUSHPAY_CONFIG.WEBHOOK.url}`);
+
+                // Atualizar informações na tela
+                document.getElementById('apiUrl').textContent = baseUrl;
+                document.getElementById('mode').textContent = RUSHPAY_CONFIG.SANDBOX ? 'Sandbox' : 'Produção';
+                document.getElementById('credentials').textContent = 'Configuradas';
+                document.getElementById('webhook').textContent = RUSHPAY_CONFIG.WEBHOOK.url;
+
+                addLog('✅ Configuração válida!');
+                
+            } catch (error) {
+                addLog(`❌ Erro na configuração: ${error.message}`, 'error');
+            }
+        }
+
+        // Função para testar conectividade
+        async function testConnectivity() {
+            addLog('🌐 Iniciando teste de conectividade...');
+            
+            try {
+                if (!campaignPayments) {
+                    campaignPayments = new AngelicaCampaignPayments();
+                    addLog('✅ AngelicaCampaignPayments inicializado');
+                }
+
+                const result = await campaignPayments.rushPay.testConnectivity();
+                
+                if (result === true) {
+                    addLog('✅ Conectividade OK - API acessível');
+                } else if (result === 'demo_mode') {
+                    addLog('⚠️ Modo demonstração ativado - API não acessível');
+                } else {
+                    addLog(`❌ Erro de conectividade: ${result}`, 'error');
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erro no teste de conectividade: ${error.message}`, 'error');
+            }
+        }
+
+        // Função para testar transação
+        async function testTransaction() {
+            addLog('💳 Iniciando teste de transação PIX...');
+            
+            try {
+                if (!campaignPayments) {
+                    campaignPayments = new AngelicaCampaignPayments();
+                    addLog('✅ AngelicaCampaignPayments inicializado');
+                }
+
+                // Dados de teste
+                const baseAmount = 25.00; // Valor mínimo
+                const selectedAddons = []; // Sem add-ons
+                const customerData = {
+                    name: 'Teste Usuário',
+                    email: 'teste@exemplo.com',
+                    cpf: '12345678901',
+                    phone: '11999999999'
+                };
+
+                addLog(`📋 Dados do teste:`);
+                addLog(`  - Valor base: R$ ${baseAmount.toFixed(2)}`);
+                addLog(`  - Add-ons: ${selectedAddons.length}`);
+                addLog(`  - Cliente: ${customerData.name} (${customerData.email})`);
+
+                const result = await campaignPayments.processDonation(baseAmount, selectedAddons, customerData);
+                
+                if (result && result.success) {
+                    addLog('✅ Transação criada com sucesso!');
+                    addLog(`  - ID: ${result.transactionId}`);
+                    addLog(`  - Status: ${result.status}`);
+                    addLog(`  - Valor: R$ ${result.amount.toFixed(2)}`);
+                    addLog(`  - PIX Code: ${result.pixCode ? 'Sim' : 'Não'}`);
+                    addLog(`  - QR Code: ${result.pixQrCode ? 'Sim' : 'Não'}`);
+                } else {
+                    addLog(`❌ Erro na transação: ${result?.error || 'Erro desconhecido'}`, 'error');
+                }
+                
+            } catch (error) {
+                addLog(`❌ Erro no teste de transação: ${error.message}`, 'error');
+                addLog(`Stack: ${error.stack}`, 'error');
+            }
+        }
+
+        // Inicialização
+        window.addEventListener('load', function() {
+            addLog('🚀 Página carregada, iniciando testes...');
+            
+            // Verificar se os arquivos foram carregados
+            if (typeof RUSHPAY_CONFIG !== 'undefined') {
+                addLog('✅ rushpay-config.js carregado');
+            } else {
+                addLog('❌ rushpay-config.js não carregado', 'error');
+            }
+            
+            if (typeof AngelicaCampaignPayments !== 'undefined') {
+                addLog('✅ rushpay-integration.js carregado');
+            } else {
+                addLog('❌ rushpay-integration.js não carregado', 'error');
+            }
+            
+            // Executar teste de configuração automaticamente
+            setTimeout(testConfig, 1000);
+        });
+    </script>
+</body>
+</html>
