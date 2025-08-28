@@ -1,0 +1,63 @@
+<svg width="120" height="120" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradiente principal -->
+    <linearGradient id="mainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#be185d;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradiente para pele -->
+    <linearGradient id="skinGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fef3c7;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#fcd34d;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Sombra -->
+    <filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
+      <feDropShadow dx="2" dy="2" stdDeviation="3" flood-color="#000000" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+  
+  <!-- Fundo circular -->
+  <circle cx="60" cy="60" r="60" fill="url(#mainGrad)" filter="url(#shadow)"/>
+  
+  <!-- Cabeça -->
+  <ellipse cx="60" cy="42" rx="18" ry="20" fill="url(#skinGrad)"/>
+  
+  <!-- Cabelo -->
+  <ellipse cx="60" cy="32" rx="20" ry="12" fill="#8b5a2b"/>
+  <ellipse cx="60" cy="28" rx="18" ry="8" fill="#a0642c"/>
+  
+  <!-- Olhos -->
+  <ellipse cx="54" cy="40" rx="2" ry="3" fill="#2563eb"/>
+  <ellipse cx="66" cy="40" rx="2" ry="3" fill="#2563eb"/>
+  <circle cx="54" cy="39" r="0.8" fill="#ffffff"/>
+  <circle cx="66" cy="39" r="0.8" fill="#ffffff"/>
+  
+  <!-- Sobrancelhas -->
+  <ellipse cx="54" cy="36" rx="3" ry="1" fill="#6b4423"/>
+  <ellipse cx="66" cy="36" rx="3" ry="1" fill="#6b4423"/>
+  
+  <!-- Nariz -->
+  <ellipse cx="60" cy="45" rx="1" ry="2" fill="#f59e0b" opacity="0.6"/>
+  
+  <!-- Boca -->
+  <ellipse cx="60" cy="50" rx="3" ry="1.5" fill="#dc2626" opacity="0.8"/>
+  
+  <!-- Pescoço -->
+  <rect x="54" y="58" width="12" height="8" fill="url(#skinGrad)" rx="2"/>
+  
+  <!-- Camisa/roupa -->
+  <ellipse cx="60" cy="85" rx="25" ry="20" fill="#1f2937"/>
+  <ellipse cx="60" cy="85" rx="23" ry="18" fill="#374151"/>
+  
+  <!-- Gola da camisa -->
+  <path d="M 45 75 Q 60 70 75 75 Q 60 78 45 75" fill="#ffffff"/>
+  
+  <!-- Cortar parte inferior -->
+  <rect x="0" y="100" width="120" height="20" fill="url(#mainGrad)"/>
+  
+  <!-- Borda sutil -->
+  <circle cx="60" cy="60" r="58" fill="none" stroke="#ffffff" stroke-width="0.5" opacity="0.4"/>
+</svg>

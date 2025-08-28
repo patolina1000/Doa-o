@@ -1,0 +1,1285 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajude Isabela nessa jornada tão difícil | Vakinha</title>
+    <link rel="shortcut icon" href="images/5j2ttH9V5xZw.ico">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .vakinha-logo {
+            width: 24px;
+            height: 24px;
+            background: #24ca68;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+        }
+
+        .vakinha-text {
+            color: #24ca68;
+            font-weight: 600;
+            font-size: 18px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .campaign-header {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .campaign-title {
+            font-size: 24px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .campaign-id {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+
+        .payment-container {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .amount-section {
+            margin-bottom: 24px;
+        }
+
+        .amount-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .amount-input-container {
+            position: relative;
+            margin-bottom: 12px;
+        }
+
+        .amount-input {
+            width: 100%;
+            padding: 16px 20px 16px 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .amount-input:focus {
+            outline: none;
+            border-color: #24ca68;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .min-amount {
+            font-size: 12px;
+            color: #e74c3c;
+            margin-bottom: 20px;
+        }
+
+        .payment-method {
+            margin-bottom: 24px;
+        }
+
+        .payment-method h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .pix-option {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border: 2px solid #24ca68;
+            border-radius: 8px;
+            background: #f0f9f3;
+        }
+
+        .pix-radio {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #24ca68;
+            border-radius: 50%;
+            background: #24ca68;
+            position: relative;
+        }
+
+        .pix-radio::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+        }
+
+        .pix-text {
+            font-weight: 600;
+            color: #24ca68;
+        }
+
+        .addons-section {
+            margin-bottom: 24px;
+        }
+
+        .addons-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 16px;
+        }
+
+        .addon-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .addon-item:hover {
+            border-color: #24ca68;
+            background: #f9f9f9;
+        }
+
+        .addon-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .addon-icon {
+            width: 40px;
+            height: 40px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
+
+        .addon-details h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 2px;
+        }
+
+        .addon-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: #24ca68;
+        }
+
+        .totals {
+            border-top: 1px solid #e0e0e0;
+            padding-top: 20px;
+            margin-bottom: 24px;
+        }
+
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .total-row.final {
+            font-size: 18px;
+            font-weight: 600;
+            padding-top: 8px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .contribute-btn {
+            width: 100%;
+            background: #24ca68;
+            color: white;
+            border: none;
+            padding: 16px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .contribute-btn:hover {
+            background: #20b85e;
+        }
+
+        .qr-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Área de logs de debug */
+        .debug-panel {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 400px;
+            height: 100vh;
+            background: #1e1e1e;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            overflow-y: auto;
+            z-index: 9999;
+            border-left: 2px solid #333;
+            display: none;
+        }
+
+        .debug-header {
+            background: #333;
+            padding: 10px;
+            border-bottom: 1px solid #555;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .debug-title {
+            font-weight: bold;
+            color: #00ff00;
+        }
+
+        .debug-toggle {
+            background: #666;
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+            font-size: 10px;
+        }
+
+        .debug-toggle:hover {
+            background: #888;
+        }
+
+        .debug-content {
+            padding: 10px;
+            line-height: 1.4;
+        }
+
+        .log-entry {
+            margin-bottom: 5px;
+            padding: 3px 0;
+            border-bottom: 1px solid #333;
+        }
+
+        .log-timestamp {
+            color: #888;
+            font-size: 10px;
+        }
+
+        .log-level-info { color: #87ceeb; }
+        .log-level-success { color: #90ee90; }
+        .log-level-warning { color: #ffd700; }
+        .log-level-error { color: #ff6b6b; }
+        .log-level-debug { color: #dda0dd; }
+
+        .debug-toggle-btn {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #333;
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 10000;
+            font-size: 12px;
+        }
+
+        .debug-toggle-btn:hover {
+            background: #555;
+        }
+
+        .qr-content {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+
+        .loading-spinner {
+            width: 24px;
+            height: 24px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #24ca68;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 16px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .qr-status {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .qr-thanks {
+            font-size: 18px;
+            font-weight: 600;
+            color: #24ca68;
+            margin-bottom: 20px;
+        }
+
+        .qr-code-container {
+            margin: 24px 0;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: white;
+        }
+
+        .qr-instructions {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 16px;
+        }
+
+        .pix-code-container {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            border: 1px dashed #ccc;
+        }
+
+        .pix-code {
+            font-family: monospace;
+            font-size: 12px;
+            word-break: break-all;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .copy-btn {
+            width: 100%;
+            background: #24ca68;
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background: #20b85e;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .campaign-header, .payment-container {
+                padding: 16px;
+            }
+            
+            .qr-content {
+                padding: 24px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="vakinha-logo">V</div>
+            <span class="vakinha-text">vakinha</span>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="campaign-header">
+            <h1 class="campaign-title">Ajude Isabela nessa jornada tão difícil</h1>
+            <div class="campaign-id">ID: 4452341</div>
+        </div>
+
+        <div class="payment-container">
+            <div class="amount-section">
+                <div class="amount-label">Valor da doação</div>
+                <div class="amount-input-container">
+                    <span class="currency-symbol">R$</span>
+                    <input type="text" class="amount-input" id="donationAmount" value="0,00" placeholder="0,00">
+                </div>
+                <div class="min-amount">Valor mínimo da doação é de R$ 5,00</div>
+            </div>
+
+            <div class="payment-method">
+                <h3>Forma de pagamento</h3>
+                <div class="pix-option">
+                    <div class="pix-radio"></div>
+                    <span class="pix-text">Pix</span>
+                </div>
+            </div>
+
+            <div class="addons-section">
+                <h3 class="addons-title">Turbine sua doação</h3>
+                
+                <div class="addon-item" data-value="10.00">
+                    <div class="addon-info">
+                        <div class="addon-icon">🚗</div>
+                        <div class="addon-details">
+                            <h4>Auxílio transporte</h4>
+                        </div>
+                    </div>
+                    <div class="addon-price">R$ 10,00</div>
+                </div>
+
+                <div class="addon-item" data-value="15.00">
+                    <div class="addon-info">
+                        <div class="addon-icon">🍽️</div>
+                        <div class="addon-details">
+                            <h4>Auxílio Refeição</h4>
+                        </div>
+                    </div>
+                    <div class="addon-price">R$ 15,00</div>
+                </div>
+
+                <div class="addon-item" data-value="85.00">
+                    <div class="addon-info">
+                        <div class="addon-icon">🛒</div>
+                        <div class="addon-details">
+                            <h4>Doar Cesta Básica</h4>
+                        </div>
+                    </div>
+                    <div class="addon-price">R$ 85,00</div>
+                </div>
+            </div>
+
+            <div class="totals">
+                <div class="total-row">
+                    <span>Contribuição:</span>
+                    <span id="contributionTotal">R$ 0,00</span>
+                </div>
+                <div class="total-row final">
+                    <span>Total:</span>
+                    <span id="finalTotal">R$ 0,00</span>
+                </div>
+            </div>
+
+            <button class="contribute-btn" id="contributeBtn">CONTRIBUIR</button>
+        </div>
+    </div>
+
+    <!-- Modal do QR Code PIX -->
+    <div class="qr-modal" id="qrModal">
+        <div class="qr-content">
+            <button class="close-modal" onclick="closeQRModal()">&times;</button>
+            
+            <div class="loading-spinner" id="loadingSpinner"></div>
+            <div class="qr-status" id="qrStatus">Aguardando pagamento...</div>
+            <div class="qr-thanks">Agradecemos pelo apoio 💚</div>
+            
+            <div class="qr-instructions">Escaneie o QR Code abaixo:</div>
+            
+            <div class="qr-code-container">
+                <div class="qr-code" id="qrCodeDisplay">
+                    <!-- QR Code será inserido aqui -->
+                </div>
+                
+                <div class="pix-code-container">
+                    <div class="qr-instructions">Copie e cole o código abaixo em seu banco:</div>
+                    <div class="pix-code" id="pixCode">00020126820014br.gov.bcb.pix2563pix.treeal.com/qr/v3/at/4522ae4</div>
+                    <button class="copy-btn" onclick="copyPixCode()">COPIAR CÓDIGO PIX</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Botão para mostrar/ocultar logs de debug -->
+    <button class="debug-toggle-btn" onclick="toggleDebugPanel()">🔧 DEBUG</button>
+
+    <!-- Painel de logs de debug -->
+    <div class="debug-panel" id="debugPanel">
+        <div class="debug-header">
+            <span class="debug-title">🔍 LOGS DE DEBUG - RushPay</span>
+            <button class="debug-toggle" onclick="toggleDebugPanel()">✕</button>
+        </div>
+        <div class="debug-content" id="debugContent">
+            <div class="log-entry">
+                <span class="log-timestamp">[Inicializando...]</span>
+                <span class="log-level-info">Sistema de logs iniciado</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts externos -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+    
+    <!-- Scripts da integração RushPay -->
+    <script src="js/rushpay-config.js"></script>
+    <script src="js/rushpay-integration.js"></script>
+    
+    <script>
+        // Sistema de logs de debug
+        let debugLogs = [];
+        let debugEnabled = true;
+
+        // Função para adicionar log de debug
+        function debugLog(message, level = 'info', data = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = {
+                timestamp: timestamp,
+                message: message,
+                level: level,
+                data: data
+            };
+            
+            debugLogs.push(logEntry);
+            
+            // Limitar logs a 1000 entradas
+            if (debugLogs.length > 1000) {
+                debugLogs = debugLogs.slice(-500);
+            }
+            
+            // Adicionar ao painel visual
+            addLogToPanel(logEntry);
+            
+            // Log no console também
+            const consoleMethod = level === 'error' ? 'error' : 
+                                 level === 'warning' ? 'warn' : 
+                                 level === 'success' ? 'log' : 'info';
+            console[consoleMethod](`[DEBUG ${level.toUpperCase()}] ${message}`, data || '');
+        }
+
+        // Função para adicionar log ao painel visual
+        function addLogToPanel(logEntry) {
+            const debugContent = document.getElementById('debugContent');
+            const logDiv = document.createElement('div');
+            logDiv.className = 'log-entry';
+            
+            const timestampSpan = document.createElement('span');
+            timestampSpan.className = 'log-timestamp';
+            timestampSpan.textContent = `[${logEntry.timestamp}] `;
+            
+            const messageSpan = document.createElement('span');
+            messageSpan.className = `log-level-${logEntry.level}`;
+            messageSpan.textContent = logEntry.message;
+            
+            logDiv.appendChild(timestampSpan);
+            logDiv.appendChild(messageSpan);
+            
+            debugContent.appendChild(logDiv);
+            
+            // Auto-scroll para o final
+            debugContent.scrollTop = debugContent.scrollHeight;
+        }
+
+        // Função para mostrar/ocultar painel de debug
+        function toggleDebugPanel() {
+            const panel = document.getElementById('debugPanel');
+            const btn = document.querySelector('.debug-toggle-btn');
+            
+            if (panel.style.display === 'none' || !panel.style.display) {
+                panel.style.display = 'block';
+                btn.textContent = '🔧 HIDE';
+                debugLog('Painel de debug aberto', 'info');
+            } else {
+                panel.style.display = 'none';
+                btn.textContent = '🔧 DEBUG';
+            }
+        }
+
+        // Função para limpar logs
+        function clearDebugLogs() {
+            debugLogs = [];
+            document.getElementById('debugContent').innerHTML = '';
+            debugLog('Logs limpos', 'info');
+        }
+
+        // Função para carregar biblioteca QRCode dinamicamente
+        function loadQRCodeLibrary() {
+            return new Promise((resolve, reject) => {
+                // Verificar se já está carregada
+                if (typeof QRCode !== 'undefined') {
+                    resolve();
+                    return;
+                }
+                
+                debugLog('📦 Carregando biblioteca QRCode...', 'info');
+                
+                const script = document.createElement('script');
+                script.src = 'https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js';
+                script.onload = () => {
+                    debugLog('✅ Biblioteca QRCode carregada com sucesso', 'success');
+                    resolve();
+                };
+                script.onerror = () => {
+                    debugLog('❌ Erro ao carregar biblioteca QRCode', 'error');
+                    reject(new Error('Falha ao carregar biblioteca QRCode'));
+                };
+                
+                document.head.appendChild(script);
+            });
+        }
+
+        // Variáveis globais
+        let selectedAddons = new Set();
+        let baseAmount = 0;
+        let campaignPayments = null;
+
+        // Inicializar sistema de pagamentos
+        document.addEventListener('DOMContentLoaded', function() {
+            debugLog('🚀 Iniciando carregamento da página', 'info');
+            debugLog('📋 Verificando dependências...', 'debug');
+            
+            // Verificar e carregar biblioteca QRCode se necessário
+            if (typeof QRCode === 'undefined') {
+                debugLog('⚠️ Biblioteca QRCode não encontrada, carregando...', 'warning');
+                loadQRCodeLibrary().then(() => {
+                    debugLog('✅ Biblioteca QRCode carregada na inicialização', 'success');
+                }).catch((error) => {
+                    debugLog('❌ Erro ao carregar QRCode na inicialização', 'error', {
+                        error: error.message
+                    });
+                });
+            } else {
+                debugLog('✅ Biblioteca QRCode já carregada', 'success');
+            }
+            
+            try {
+                // Verificar se as classes estão disponíveis
+                debugLog('🔍 Verificando AngelicaCampaignPayments...', 'debug');
+                if (typeof AngelicaCampaignPayments === 'undefined') {
+                    debugLog('❌ AngelicaCampaignPayments não encontrada', 'error', {
+                        availableClasses: Object.keys(window).filter(key => key.includes('Campaign') || key.includes('Pay'))
+                    });
+                    throw new Error('Classe AngelicaCampaignPayments não encontrada. Verifique se o arquivo rushpay-integration.js está carregado.');
+                }
+                debugLog('✅ AngelicaCampaignPayments encontrada', 'success');
+
+                debugLog('🔍 Verificando RUSHPAY_CONFIG...', 'debug');
+                if (typeof RUSHPAY_CONFIG === 'undefined') {
+                    debugLog('❌ RUSHPAY_CONFIG não encontrado', 'error', {
+                        availableConfigs: Object.keys(window).filter(key => key.includes('CONFIG'))
+                    });
+                    throw new Error('Configuração RUSHPAY_CONFIG não encontrada. Verifique se o arquivo rushpay-config.js está carregado.');
+                }
+                debugLog('✅ RUSHPAY_CONFIG encontrado', 'success');
+
+                debugLog('🔍 Verificando credenciais...', 'debug');
+                if (!RUSHPAY_CONFIG.PUBLIC_KEY || !RUSHPAY_CONFIG.SECRET_KEY) {
+                    debugLog('❌ Credenciais não configuradas', 'error', {
+                        hasPublicKey: !!RUSHPAY_CONFIG.PUBLIC_KEY,
+                        hasSecretKey: !!RUSHPAY_CONFIG.SECRET_KEY,
+                        publicKeyLength: RUSHPAY_CONFIG.PUBLIC_KEY?.length || 0,
+                        secretKeyLength: RUSHPAY_CONFIG.SECRET_KEY?.length || 0
+                    });
+                    throw new Error('Credenciais da API não configuradas. Configure PUBLIC_KEY e SECRET_KEY no arquivo rushpay-config.js');
+                }
+                debugLog('✅ Credenciais configuradas', 'success', {
+                    publicKeyPreview: RUSHPAY_CONFIG.PUBLIC_KEY.substring(0, 8) + '...',
+                    secretKeyPreview: RUSHPAY_CONFIG.SECRET_KEY.substring(0, 8) + '...',
+                    sandbox: RUSHPAY_CONFIG.SANDBOX
+                });
+
+                // Criar instância do sistema de pagamentos
+                debugLog('🏗️ Criando instância AngelicaCampaignPayments...', 'info');
+                campaignPayments = new AngelicaCampaignPayments();
+                debugLog('✅ Sistema de pagamentos RushPay inicializado em modo PRODUÇÃO', 'success');
+                
+                // Verificar configuração
+                debugLog('🔍 Validando configuração...', 'debug');
+                const config = getRushPayConfig();
+                if (!config.validation.valid) {
+                    debugLog('❌ Erro na configuração RushPay', 'error', config.validation.errors);
+                    showConfigWarning(config.validation.errors);
+                } else {
+                    debugLog('✅ Configuração RushPay válida', 'success', {
+                        baseUrl: config.baseUrl,
+                        campaign: config.CAMPAIGN.name,
+                        webhookUrl: config.WEBHOOK.url
+                    });
+                }
+                
+                debugLog('🎯 Sistema inicializado com sucesso!', 'success');
+                
+            } catch (error) {
+                debugLog('💥 Erro crítico ao inicializar pagamentos', 'error', {
+                    message: error.message,
+                    stack: error.stack,
+                    name: error.name
+                });
+                console.error('❌ Erro crítico ao inicializar pagamentos:', error);
+                alert('Erro ao inicializar sistema de pagamentos: ' + error.message);
+            }
+            
+            debugLog('📊 Atualizando totais...', 'debug');
+            updateTotals();
+            debugLog('✅ Página carregada completamente', 'success');
+        });
+
+        function showConfigWarning(errors) {
+            debugLog('⚠️ Aviso de configuração', 'warning', {
+                errors: errors,
+                config: {
+                    hasPublicKey: !!RUSHPAY_CONFIG?.PUBLIC_KEY,
+                    hasSecretKey: !!RUSHPAY_CONFIG?.SECRET_KEY,
+                    sandbox: RUSHPAY_CONFIG?.SANDBOX,
+                    baseUrl: RUSHPAY_CONFIG?.SANDBOX ? RUSHPAY_CONFIG?.SANDBOX_URL : RUSHPAY_CONFIG?.PRODUCTION_URL
+                }
+            });
+            console.error('❌ Erro na configuração RushPay:', errors);
+            console.log('🔧 Modo PRODUÇÃO ativo - usando API real do RushPay');
+        }
+
+        // Formatação de moeda
+        function formatCurrency(value) {
+            return new Intl.NumberFormat('pt-BR', {
+                style: 'currency',
+                currency: 'BRL'
+            }).format(value);
+        }
+
+        function parseCurrency(value) {
+            return parseFloat(value.replace(/[^\d,]/g, '').replace(',', '.')) || 0;
+        }
+
+        // Input de valor
+        document.getElementById('donationAmount').addEventListener('input', function(e) {
+            const oldValue = baseAmount;
+            let value = e.target.value.replace(/[^\d]/g, '');
+            if (value) {
+                value = (parseInt(value) / 100).toFixed(2);
+                e.target.value = value.replace('.', ',');
+                baseAmount = parseFloat(value);
+            } else {
+                e.target.value = '0,00';
+                baseAmount = 0;
+            }
+            
+            debugLog('💰 Valor alterado', 'debug', {
+                oldValue: oldValue,
+                newValue: baseAmount,
+                inputValue: e.target.value,
+                rawInput: value
+            });
+            
+            updateTotals();
+        });
+
+        // Seleção de add-ons
+        document.querySelectorAll('.addon-item').forEach(item => {
+            item.addEventListener('click', function() {
+                const value = parseFloat(this.dataset.value);
+                const addonName = this.querySelector('h4').textContent;
+                
+                if (selectedAddons.has(value)) {
+                    selectedAddons.delete(value);
+                    this.style.background = '';
+                    this.style.borderColor = '#e0e0e0';
+                    debugLog('❌ Add-on removido', 'debug', {
+                        addonName: addonName,
+                        value: value,
+                        selectedAddonsCount: selectedAddons.size
+                    });
+                } else {
+                    selectedAddons.add(value);
+                    this.style.background = '#f0f9f3';
+                    this.style.borderColor = '#24ca68';
+                    debugLog('✅ Add-on adicionado', 'debug', {
+                        addonName: addonName,
+                        value: value,
+                        selectedAddonsCount: selectedAddons.size
+                    });
+                }
+                updateTotals();
+            });
+        });
+
+        function updateTotals() {
+            const addonsTotal = Array.from(selectedAddons).reduce((sum, value) => sum + value, 0);
+            const total = baseAmount + addonsTotal;
+            
+            document.getElementById('contributionTotal').textContent = formatCurrency(baseAmount);
+            document.getElementById('finalTotal').textContent = formatCurrency(total);
+            
+            debugLog('📊 Totais atualizados', 'debug', {
+                baseAmount: baseAmount,
+                addonsTotal: addonsTotal,
+                total: total,
+                selectedAddonsCount: selectedAddons.size,
+                selectedAddonsValues: Array.from(selectedAddons)
+            });
+        }
+
+        // Botão contribuir
+        document.getElementById('contributeBtn').addEventListener('click', async function() {
+            const total = baseAmount + Array.from(selectedAddons).reduce((sum, value) => sum + value, 0);
+            
+                         debugLog('🖱️ Botão CONTRIBUIR clicado', 'info', {
+                total: total,
+                baseAmount: baseAmount,
+                selectedAddonsCount: selectedAddons.size,
+                selectedAddonsValues: Array.from(selectedAddons)
+            });
+            
+                         if (total < 5) {
+                debugLog('❌ Valor mínimo não atingido', 'warning', {
+                    total: total,
+                                         minimum: 5
+                });
+                                 alert('O valor mínimo da doação é de R$ 5,00');
+                return;
+            }
+
+                         debugLog('✅ Valor mínimo atingido, iniciando processamento', 'success');
+
+            // Desabilitar botão durante processamento
+            this.disabled = true;
+                         this.textContent = 'PROCESSANDO...';
+            debugLog('🔒 Botão desabilitado durante processamento', 'debug');
+
+            try {
+                await processDonation(total);
+            } catch (error) {
+                debugLog('💥 Erro capturado no botão contribuir', 'error', {
+                    message: error.message,
+                    name: error.name
+                });
+                                 console.error('Erro ao processar doação:', error);
+                 alert('Erro ao processar doação. Tente novamente.');
+            } finally {
+                // Reabilitar botão
+                this.disabled = false;
+                                 this.textContent = 'CONTRIBUIR';
+                debugLog('🔓 Botão reabilitado', 'debug');
+            }
+        });
+
+                 async function processDonation(totalAmount) {
+             debugLog('🎯 Iniciando processamento de doação', 'info', {
+                totalAmount: totalAmount,
+                baseAmount: baseAmount,
+                selectedAddonsCount: selectedAddons.size,
+                selectedAddonsValues: Array.from(selectedAddons)
+            });
+
+            try {
+                // Verificar se a API está configurada
+                debugLog('🔍 Verificando configuração da API...', 'debug');
+                if (typeof RUSHPAY_CONFIG === 'undefined') {
+                    debugLog('❌ RUSHPAY_CONFIG não encontrado', 'error');
+                    throw new Error('Configuração RushPay não encontrada. Verifique se o arquivo rushpay-config.js está carregado.');
+                }
+                debugLog('✅ RUSHPAY_CONFIG encontrado', 'success');
+
+                if (!RUSHPAY_CONFIG.PUBLIC_KEY || !RUSHPAY_CONFIG.SECRET_KEY) {
+                    debugLog('❌ Credenciais não configuradas', 'error', {
+                        hasPublicKey: !!RUSHPAY_CONFIG.PUBLIC_KEY,
+                        hasSecretKey: !!RUSHPAY_CONFIG.SECRET_KEY
+                    });
+                    throw new Error('Credenciais da API RushPay não configuradas. Configure PUBLIC_KEY e SECRET_KEY no arquivo rushpay-config.js');
+                }
+                debugLog('✅ Credenciais configuradas', 'success');
+
+                if (!campaignPayments || typeof campaignPayments.processDonation !== 'function') {
+                    debugLog('❌ Sistema de pagamentos não inicializado', 'error', {
+                        hasCampaignPayments: !!campaignPayments,
+                        hasProcessDonation: !!(campaignPayments && typeof campaignPayments.processDonation === 'function')
+                    });
+                    throw new Error('Sistema de pagamentos não inicializado corretamente. Verifique se o arquivo rushpay-integration.js está carregado.');
+                }
+                debugLog('✅ Sistema de pagamentos inicializado', 'success');
+
+                // Preparar dados dos add-ons selecionados
+                debugLog('📋 Preparando dados dos add-ons...', 'debug');
+                const selectedAddonsData = Array.from(selectedAddons).map(value => {
+                    const addonConfig = RUSHPAY_CONFIG.ADDONS.find(addon => addon.value === value);
+                    const addonData = {
+                        value: value,
+                        name: addonConfig?.name || `Add-on R$ ${value}`,
+                        id: addonConfig?.id || 'default'
+                    };
+                    debugLog(`  📦 Add-on: ${addonData.name} (R$ ${addonData.value})`, 'debug');
+                    return addonData;
+                });
+
+                debugLog('📊 Dados da transação preparados', 'info', {
+                    baseAmount: baseAmount,
+                    addonsCount: selectedAddonsData.length,
+                    totalAmount: totalAmount,
+                    addonsData: selectedAddonsData
+                });
+
+                                 // Processar pagamento via API real do RushPay
+                 debugLog('🔄 Processando pagamento via RushPay API...', 'info');
+                debugLog('📋 Credenciais configuradas', 'debug', {
+                    publicKey: RUSHPAY_CONFIG.PUBLIC_KEY.substring(0, 8) + '...',
+                    sandbox: RUSHPAY_CONFIG.SANDBOX,
+                    baseUrl: RUSHPAY_CONFIG.SANDBOX ? RUSHPAY_CONFIG.SANDBOX_URL : RUSHPAY_CONFIG.PRODUCTION_URL,
+                    fullUrl: `${RUSHPAY_CONFIG.SANDBOX ? RUSHPAY_CONFIG.SANDBOX_URL : RUSHPAY_CONFIG.PRODUCTION_URL}/transaction.purchase`
+                });
+                
+                // Log específico da URL para debug
+                debugLog('🌐 URL da API RushPay', 'info', {
+                    sandboxUrl: RUSHPAY_CONFIG.SANDBOX_URL,
+                    productionUrl: RUSHPAY_CONFIG.PRODUCTION_URL,
+                    selectedUrl: RUSHPAY_CONFIG.SANDBOX ? RUSHPAY_CONFIG.SANDBOX_URL : RUSHPAY_CONFIG.PRODUCTION_URL,
+                    fullEndpoint: `${RUSHPAY_CONFIG.SANDBOX ? RUSHPAY_CONFIG.SANDBOX_URL : RUSHPAY_CONFIG.PRODUCTION_URL}/transaction.purchase`
+                });
+
+                const startTime = Date.now();
+                const result = await campaignPayments.processDonation(baseAmount, selectedAddonsData);
+                const endTime = Date.now();
+
+                debugLog('⏱️ Tempo de processamento', 'debug', {
+                    duration: `${endTime - startTime}ms`
+                });
+
+                                 if (result && result.success) {
+                     debugLog('✅ Pagamento processado com sucesso!', 'success', {
+                        transactionId: result.transactionId,
+                        status: result.status,
+                        amount: result.amount,
+                        hasPixCode: !!result.pixCode,
+                        hasQrCode: !!result.qrCodeBase64
+                    });
+                    showQRModal(result);
+                } else {
+                    debugLog('❌ Erro no resultado do pagamento', 'error', {
+                        result: result,
+                        hasResult: !!result,
+                        hasSuccess: !!(result && result.success),
+                        error: result?.error
+                    });
+                                         throw new Error(result?.error || 'Erro desconhecido ao processar pagamento');
+                }
+            } catch (error) {
+                                 debugLog('💥 Erro detalhado ao processar doação', 'error', {
+                    message: error.message,
+                    name: error.name,
+                    stack: error.stack,
+                    totalAmount: totalAmount,
+                    baseAmount: baseAmount,
+                    selectedAddonsCount: selectedAddons.size
+                });
+                console.error('💥 Erro detalhado ao processar doação:', error);
+                                 throw new Error(`Erro ao processar doação: ${error.message}`);
+            }
+        }
+
+
+
+        function showQRModal(paymentResult) {
+            debugLog('🖼️ Exibindo modal QR Code', 'info', {
+                transactionId: paymentResult.transactionId,
+                amount: paymentResult.amount,
+                hasPixCode: !!paymentResult.pixCode,
+                hasQrCode: !!paymentResult.qrCodeBase64,
+                status: paymentResult.status
+            });
+            
+            document.getElementById('qrModal').style.display = 'flex';
+            generatePixQRCode(paymentResult);
+        }
+
+        function closeQRModal() {
+            debugLog('❌ Fechando modal QR Code', 'debug');
+            document.getElementById('qrModal').style.display = 'none';
+        }
+
+        async function generatePixQRCode(paymentResult) {
+            debugLog('🎨 Gerando QR Code PIX', 'info', {
+                transactionId: paymentResult.transactionId,
+                pixCodeLength: paymentResult.pixCode?.length || 0,
+                hasQrCodeBase64: !!paymentResult.qrCodeBase64
+            });
+            
+            const pixCode = paymentResult.pixCode;
+            document.getElementById('pixCode').textContent = pixCode;
+            
+            // Gerar QR Code
+            try {
+                let qrContainer = document.getElementById('qrCodeDisplay');
+                
+                if (paymentResult.qrCodeBase64) {
+                    debugLog('📱 Usando QR Code da API', 'debug');
+                    // Usar QR Code da API
+                    qrContainer.innerHTML = `<img src="data:image/png;base64,${paymentResult.qrCodeBase64}" alt="QR Code PIX" style="width: 200px; height: 200px;">`;
+                } else {
+                    debugLog('🎨 Gerando QR Code local', 'debug');
+                    
+                    // Verificar se a biblioteca QRCode está disponível
+                    if (typeof QRCode === 'undefined') {
+                        debugLog('⚠️ Biblioteca QRCode não carregada, tentando carregar...', 'warning');
+                        
+                        // Tentar carregar a biblioteca dinamicamente
+                        await loadQRCodeLibrary();
+                        
+                        // Verificar novamente
+                        if (typeof QRCode === 'undefined') {
+                            debugLog('⚠️ Usando fallback para QR Code', 'warning');
+                            // Usar API externa como fallback
+                            const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixCode)}`;
+                            qrContainer.innerHTML = `<img src="${qrCodeUrl}" alt="QR Code PIX" style="width: 200px; height: 200px;">`;
+                            return;
+                        }
+                    }
+                    
+                    // Gerar QR Code local
+                    const qrCodeCanvas = await QRCode.toCanvas(pixCode, {
+                        width: 200,
+                        margin: 2,
+                        color: {
+                            dark: '#000000',
+                            light: '#FFFFFF'
+                        }
+                    });
+                    
+                    qrContainer.innerHTML = '';
+                    qrContainer.appendChild(qrCodeCanvas);
+                }
+                
+                debugLog('✅ QR Code gerado com sucesso', 'success');
+                
+                // Esconder loading
+                document.getElementById('loadingSpinner').style.display = 'none';
+                
+                // Iniciar verificação de status
+                if (campaignPayments && paymentResult.transactionId) {
+                    debugLog('🔄 Iniciando verificação de status', 'debug', {
+                        transactionId: paymentResult.transactionId
+                    });
+                    startPaymentStatusCheck(paymentResult.transactionId);
+                }
+                
+            } catch (error) {
+                debugLog('❌ Erro ao gerar QR Code', 'error', {
+                    message: error.message,
+                    name: error.name,
+                    stack: error.stack
+                });
+                console.error('Erro ao gerar QR Code:', error);
+                
+                // Tentar usar fallback externo
+                try {
+                    debugLog('🔄 Tentando fallback externo para QR Code', 'info');
+                    const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(pixCode)}`;
+                    document.getElementById('qrCodeDisplay').innerHTML = `<img src="${qrCodeUrl}" alt="QR Code PIX" style="width: 200px; height: 200px;">`;
+                    debugLog('✅ Fallback externo funcionou', 'success');
+                } catch (fallbackError) {
+                    debugLog('❌ Fallback externo também falhou', 'error', {
+                        error: fallbackError.message
+                    });
+                    document.getElementById('qrCodeDisplay').innerHTML = '<div style="color: #e74c3c;">Erro ao gerar QR Code<br><small>Use o código PIX abaixo</small></div>';
+                }
+                
+                document.getElementById('loadingSpinner').style.display = 'none';
+            }
+        }
+
+        function startPaymentStatusCheck(transactionId) {
+            debugLog('🔄 Iniciando verificação de status do pagamento', 'info', {
+                transactionId: transactionId,
+                interval: '5 segundos',
+                timeout: '10 minutos'
+            });
+            
+            let checkCount = 0;
+            const checkInterval = setInterval(async () => {
+                checkCount++;
+                debugLog(`🔍 Verificação #${checkCount} - Status do pagamento`, 'debug', {
+                    transactionId: transactionId,
+                    checkNumber: checkCount
+                });
+                
+                try {
+                    const status = await campaignPayments.checkCurrentPaymentStatus();
+                    debugLog('📊 Status recebido', 'debug', {
+                        status: status,
+                        isPaid: status && status.status === 'paid'
+                    });
+                    
+                    if (status && status.status === 'paid') {
+                        debugLog('✅ Pagamento confirmado!', 'success', {
+                            transactionId: transactionId,
+                            status: status.status,
+                            amount: status.amount
+                        });
+                        clearInterval(checkInterval);
+                        showPaymentSuccess();
+                    }
+                } catch (error) {
+                    debugLog('❌ Erro ao verificar status', 'error', {
+                        message: error.message,
+                        checkNumber: checkCount,
+                        transactionId: transactionId
+                    });
+                    console.error('Erro ao verificar status:', error);
+                }
+            }, 5000); // Verificar a cada 5 segundos
+
+            // Parar verificação após 10 minutos
+            setTimeout(() => {
+                debugLog('⏰ Timeout da verificação de status', 'warning', {
+                    transactionId: transactionId,
+                    totalChecks: checkCount
+                });
+                clearInterval(checkInterval);
+            }, 600000);
+        }
+
+        function showPaymentSuccess() {
+            debugLog('🎉 Exibindo sucesso do pagamento', 'success');
+            document.getElementById('qrStatus').textContent = 'Pagamento confirmado! ✅';
+            document.getElementById('qrStatus').style.color = '#24ca68';
+            document.getElementById('qrThanks').textContent = 'Obrigado pela sua doação! 🎉';
+        }
+
+        function copyPixCode() {
+            const pixCode = document.getElementById('pixCode').textContent;
+            debugLog('📋 Copiando código PIX', 'debug', {
+                pixCodeLength: pixCode.length,
+                pixCodePreview: pixCode.substring(0, 50) + '...'
+            });
+            
+            navigator.clipboard.writeText(pixCode).then(() => {
+                debugLog('✅ Código PIX copiado com sucesso', 'success');
+                const btn = event.target;
+                const originalText = btn.textContent;
+                btn.textContent = 'COPIADO!';
+                btn.style.background = '#20b85e';
+                
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                    btn.style.background = '#24ca68';
+                }, 2000);
+            }).catch(err => {
+                debugLog('❌ Erro ao copiar código PIX', 'error', {
+                    message: err.message,
+                    name: err.name
+                });
+                console.error('Erro ao copiar:', err);
+                alert('Não foi possível copiar automaticamente. Copie manualmente o código PIX.');
+            });
+        }
+
+        // Fechar modal clicando fora
+        document.getElementById('qrModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                debugLog('🖱️ Modal fechado clicando fora', 'debug');
+                closeQRModal();
+            }
+        });
+
+        // Log final de inicialização
+        debugLog('🎯 Sistema de debug ativo!', 'success', {
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent,
+            screenSize: `${screen.width}x${screen.height}`,
+            windowSize: `${window.innerWidth}x${window.innerHeight}`
+        });
+        
+        debugLog('💡 Dica: Clique no botão DEBUG no canto superior direito para ver os logs', 'info');
+    </script>
+</body>
+</html>

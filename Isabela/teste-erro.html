@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Erro - RushPay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover { background: #0056b3; }
+        .log {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Teste de Diagnóstico - RushPay</h1>
+        <p>Esta página testa se os scripts estão carregando corretamente.</p>
+        
+        <div class="status info">
+            <h3>📋 Status dos Scripts</h3>
+            <div id="scriptStatus">Verificando...</div>
+        </div>
+
+        <div class="status info">
+            <h3>🧪 Teste de Funcionalidade</h3>
+            <button onclick="testDonation()">Testar Doação</button>
+            <button onclick="clearLog()">Limpar Log</button>
+            <div id="testResult"></div>
+        </div>
+
+        <div class="status info">
+            <h3>📝 Log de Eventos</h3>
+            <div id="logContainer" class="log">Log será exibido aqui...</div>
+        </div>
+    </div>
+
+    <!-- Scripts da integração RushPay -->
+    <script src="js/rushpay-config.js"></script>
+    <script src="js/rushpay-integration.js"></script>
+
+    <script>
+        let logMessages = [];
+
+        // Função para adicionar log
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}`;
+            logMessages.push(logEntry);
+            
+            const container = document.getElementById('logContainer');
+            container.textContent = logMessages.join('\n');
+            container.scrollTop = container.scrollHeight;
+            
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Função para limpar log
+        function clearLog() {
+            logMessages = [];
+            document.getElementById('logContainer').textContent = 'Log limpo...';
+        }
+
+        // Verificar status dos scripts
+        function checkScriptStatus() {
+            const statusDiv = document.getElementById('scriptStatus');
+            let status = '';
+
+            // Verificar RUSHPAY_CONFIG
+            if (typeof RUSHPAY_CONFIG !== 'undefined') {
+                status += '✅ RUSHPAY_CONFIG carregado\n';
+                addLog('✅ RUSHPAY_CONFIG carregado', 'success');
+                
+                // Verificar configurações
+                if (RUSHPAY_CONFIG.PUBLIC_KEY) {
+                    status += `✅ Public Key: ${RUSHPAY_CONFIG.PUBLIC_KEY.substring(0, 8)}...\n`;
+                } else {
+                    status += '❌ Public Key não configurada\n';
+                    addLog('❌ Public Key não configurada', 'error');
+                }
+                
+                if (RUSHPAY_CONFIG.SECRET_KEY) {
+                    status += `✅ Secret Key: ${RUSHPAY_CONFIG.SECRET_KEY.substring(0, 8)}...\n`;
+                } else {
+                    status += '❌ Secret Key não configurada\n';
+                    addLog('❌ Secret Key não configurada', 'error');
+                }
+                
+                status += `✅ Sandbox: ${RUSHPAY_CONFIG.SANDBOX}\n`;
+            } else {
+                status += '❌ RUSHPAY_CONFIG não encontrado\n';
+                addLog('❌ RUSHPAY_CONFIG não encontrado', 'error');
+            }
+
+            // Verificar RushPayIntegration
+            if (typeof RushPayIntegration !== 'undefined') {
+                status += '✅ RushPayIntegration carregado\n';
+                addLog('✅ RushPayIntegration carregado', 'success');
+            } else {
+                status += '❌ RushPayIntegration não encontrado\n';
+                addLog('❌ RushPayIntegration não encontrado', 'error');
+            }
+
+            // Verificar AngelicaCampaignPayments
+            if (typeof AngelicaCampaignPayments !== 'undefined') {
+                status += '✅ AngelicaCampaignPayments carregado\n';
+                addLog('✅ AngelicaCampaignPayments carregado', 'success');
+            } else {
+                status += '❌ AngelicaCampaignPayments não encontrado\n';
+                addLog('❌ AngelicaCampaignPayments não encontrado', 'error');
+            }
+
+            statusDiv.innerHTML = status.replace(/\n/g, '<br>');
+        }
+
+        // Testar doação
+        async function testDonation() {
+            const resultDiv = document.getElementById('testResult');
+            resultDiv.innerHTML = '<div class="status info">🔄 Testando doação...</div>';
+            
+            try {
+                addLog('🎯 Iniciando teste de doação...', 'info');
+                
+                // Verificar se as classes estão disponíveis
+                if (typeof AngelicaCampaignPayments === 'undefined') {
+                    throw new Error('AngelicaCampaignPayments não está disponível');
+                }
+                
+                addLog('✅ AngelicaCampaignPayments encontrado', 'success');
+                
+                // Criar instância
+                const campaignPayments = new AngelicaCampaignPayments();
+                addLog('✅ Instância criada com sucesso', 'success');
+                
+                // Testar doação
+                const result = await campaignPayments.processDonation(25.00, [], {
+                    name: 'Teste',
+                    email: 'teste@exemplo.com'
+                });
+                
+                if (result.success) {
+                    resultDiv.innerHTML = `
+                        <div class="status success">
+                            ✅ Doação processada com sucesso!<br>
+                            Transaction ID: ${result.transactionId}<br>
+                            Valor: R$ ${result.amount.toFixed(2)}<br>
+                            Status: ${result.status}
+                        </div>
+                    `;
+                    addLog('✅ Doação processada com sucesso!', 'success');
+                } else {
+                    throw new Error(result.error || 'Erro desconhecido');
+                }
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="status error">
+                        ❌ Erro no teste: ${error.message}<br>
+                        <small>Verifique o console para mais detalhes</small>
+                    </div>
+                `;
+                addLog(`❌ Erro no teste: ${error.message}`, 'error');
+                console.error('Erro detalhado:', error);
+            }
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', function() {
+            addLog('🚀 Página carregada, verificando scripts...', 'info');
+            checkScriptStatus();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Webhook RushPay - Angélica</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+        .warning { background: #fff3cd; color: #856404; border: 1px solid #ffeaa7; }
+        .webhook-data {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .event-log {
+            background: #e9ecef;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .event-item {
+            padding: 5px 0;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .event-item:last-child {
+            border-bottom: none;
+        }
+        .timestamp {
+            color: #6c757d;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔔 Webhook RushPay - Campanha Angélica</h1>
+        <p>Este endpoint recebe notificações da RushPay para a campanha da Angélica.</p>
+        
+        <div class="status info">
+            <h3>📋 Status do Webhook</h3>
+            <p><strong>URL:</strong> <span id="webhookUrl">Carregando...</span></p>
+            <p><strong>Status:</strong> <span id="webhookStatus">Aguardando notificações...</span></p>
+            <p><strong>Última notificação:</strong> <span id="lastNotification">Nenhuma</span></p>
+        </div>
+
+        <div class="status info">
+            <h3>📥 Última Notificação Recebida</h3>
+            <div id="lastWebhookData" class="webhook-data">Nenhuma notificação recebida ainda...</div>
+        </div>
+
+        <div class="status info">
+            <h3>📝 Histórico de Eventos</h3>
+            <div id="eventHistory" class="event-log">Nenhum evento registrado...</div>
+        </div>
+
+        <div class="status warning">
+            <h3>⚠️ Informações Importantes</h3>
+            <ul>
+                <li>Este webhook deve ser configurado na plataforma RushPay</li>
+                <li>Eventos suportados: onPixCreated, onBuyApproved, onChargeback, onRefund</li>
+                <li>As notificações são processadas automaticamente</li>
+                <li>Dados são armazenados localmente para demonstração</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Configurações do webhook
+        const WEBHOOK_CONFIG = {
+            secretKey: '3a98c055-3db4-40a4-83be-f844653df074', // Secret Key para validação
+            events: ['onPixCreated', 'onBuyApproved', 'onChargeback', 'onRefund'],
+            maxHistory: 50 // Máximo de eventos no histórico
+        };
+
+        let eventHistory = [];
+        let lastWebhookData = null;
+
+        // Inicializar
+        document.addEventListener('DOMContentLoaded', function() {
+            loadWebhookInfo();
+            loadEventHistory();
+            logEvent('webhook_initialized', 'Webhook inicializado e pronto para receber notificações');
+        });
+
+        /**
+         * Carrega informações do webhook
+         */
+        function loadWebhookInfo() {
+            document.getElementById('webhookUrl').textContent = window.location.href;
+            document.getElementById('webhookStatus').textContent = 'Ativo';
+            document.getElementById('lastNotification').textContent = 'Nenhuma';
+        }
+
+        /**
+         * Registra um evento no histórico
+         */
+        function logEvent(eventType, description, data = null) {
+            const timestamp = new Date().toISOString();
+            const event = {
+                timestamp: timestamp,
+                type: eventType,
+                description: description,
+                data: data
+            };
+
+            eventHistory.unshift(event);
+
+            // Manter apenas os últimos eventos
+            if (eventHistory.length > WEBHOOK_CONFIG.maxHistory) {
+                eventHistory = eventHistory.slice(0, WEBHOOK_CONFIG.maxHistory);
+            }
+
+            // Salvar no localStorage
+            localStorage.setItem('rushpay_webhook_history', JSON.stringify(eventHistory));
+
+            // Atualizar interface
+            updateEventHistory();
+        }
+
+        /**
+         * Atualiza a interface do histórico de eventos
+         */
+        function updateEventHistory() {
+            const container = document.getElementById('eventHistory');
+            
+            if (eventHistory.length === 0) {
+                container.textContent = 'Nenhum evento registrado...';
+                return;
+            }
+
+            let html = '';
+            eventHistory.forEach(event => {
+                const localTime = new Date(event.timestamp).toLocaleString('pt-BR');
+                html += `
+                    <div class="event-item">
+                        <div class="timestamp">${localTime}</div>
+                        <strong>${event.type}:</strong> ${event.description}
+                        ${event.data ? `<br><small>Dados: ${JSON.stringify(event.data).substring(0, 100)}...</small>` : ''}
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        /**
+         * Carrega histórico de eventos do localStorage
+         */
+        function loadEventHistory() {
+            const saved = localStorage.getItem('rushpay_webhook_history');
+            if (saved) {
+                try {
+                    eventHistory = JSON.parse(saved);
+                    updateEventHistory();
+                } catch (error) {
+                    console.error('Erro ao carregar histórico:', error);
+                }
+            }
+        }
+
+        /**
+         * Valida assinatura do webhook conforme documentação
+         */
+        function validateWebhookSignature(payload, signature) {
+            // Implementação básica de validação
+            // Em produção, usar HMAC-SHA256 conforme documentação
+            try {
+                const expectedSignature = btoa(JSON.stringify(payload) + WEBHOOK_CONFIG.secretKey);
+                return signature === expectedSignature;
+            } catch (error) {
+                console.error('Erro na validação de assinatura:', error);
+                return false;
+            }
+        }
+
+        /**
+         * Processa notificação do webhook conforme documentação
+         */
+        function processWebhookNotification(webhookData) {
+            console.log('🔔 Processando notificação do webhook:', webhookData);
+
+            // Validar dados obrigatórios conforme documentação
+            const requiredFields = ['paymentId', 'status', 'paymentMethod', 'totalValue'];
+            const missingFields = requiredFields.filter(field => !webhookData[field]);
+
+            if (missingFields.length > 0) {
+                logEvent('webhook_error', `Campos obrigatórios ausentes: ${missingFields.join(', ')}`, webhookData);
+                return false;
+            }
+
+            // Processar baseado no status
+            switch (webhookData.status) {
+                case 'APPROVED':
+                    logEvent('payment_approved', `Pagamento aprovado - ID: ${webhookData.paymentId}`, webhookData);
+                    handlePaymentApproved(webhookData);
+                    break;
+                case 'PENDING':
+                    logEvent('payment_pending', `Pagamento pendente - ID: ${webhookData.paymentId}`, webhookData);
+                    break;
+                case 'REJECTED':
+                    logEvent('payment_rejected', `Pagamento rejeitado - ID: ${webhookData.paymentId}`, webhookData);
+                    break;
+                case 'REFUNDED':
+                    logEvent('payment_refunded', `Pagamento reembolsado - ID: ${webhookData.paymentId}`, webhookData);
+                    break;
+                case 'CHARGEBACK':
+                    logEvent('payment_chargeback', `Chargeback - ID: ${webhookData.paymentId}`, webhookData);
+                    break;
+                default:
+                    logEvent('payment_unknown_status', `Status desconhecido: ${webhookData.status}`, webhookData);
+            }
+
+            // Atualizar última notificação
+            lastWebhookData = webhookData;
+            updateLastWebhookData();
+            updateLastNotificationTime();
+
+            return true;
+        }
+
+        /**
+         * Manipula pagamento aprovado
+         */
+        function handlePaymentApproved(webhookData) {
+            // Aqui você pode implementar lógica específica para pagamentos aprovados
+            // Por exemplo: enviar email de confirmação, atualizar banco de dados, etc.
+            
+            console.log('✅ Pagamento aprovado processado:', {
+                paymentId: webhookData.paymentId,
+                amount: webhookData.totalValue,
+                customer: webhookData.customer?.name
+            });
+
+            // Exemplo: salvar dados do pagamento aprovado
+            const approvedPayments = JSON.parse(localStorage.getItem('rushpay_approved_payments') || '[]');
+            approvedPayments.push({
+                ...webhookData,
+                processedAt: new Date().toISOString()
+            });
+            localStorage.setItem('rushpay_approved_payments', JSON.stringify(approvedPayments));
+        }
+
+        /**
+         * Atualiza dados da última notificação
+         */
+        function updateLastWebhookData() {
+            const container = document.getElementById('lastWebhookData');
+            if (lastWebhookData) {
+                container.textContent = JSON.stringify(lastWebhookData, null, 2);
+            } else {
+                container.textContent = 'Nenhuma notificação recebida ainda...';
+            }
+        }
+
+        /**
+         * Atualiza timestamp da última notificação
+         */
+        function updateLastNotificationTime() {
+            const now = new Date().toLocaleString('pt-BR');
+            document.getElementById('lastNotification').textContent = now;
+        }
+
+        /**
+         * Simula recebimento de webhook para demonstração
+         */
+        function simulateWebhookNotification(eventType = 'onBuyApproved') {
+            const mockWebhookData = {
+                paymentId: `txn_${Date.now()}`,
+                externalId: null,
+                checkoutUrl: null,
+                referrerUrl: null,
+                customId: `demo_${Date.now()}`,
+                status: 'APPROVED',
+                paymentMethod: 'PIX',
+                deliveryStatus: null,
+                totalValue: 5000, // R$ 50,00 em centavos
+                netValue: 4850,
+                pixQrCode: null,
+                pixCode: '00020126820014br.gov.bcb.pix2563pix.example.com/qr/v1/demo',
+                billetUrl: null,
+                billetCode: null,
+                expiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hora
+                dueAt: null,
+                installments: null,
+                utm: null,
+                items: [
+                    {
+                        unitPrice: 5000,
+                        title: 'Doação para campanha Angélica',
+                        quantity: 1
+                    }
+                ],
+                customer: {
+                    id: `cust_${Date.now()}`,
+                    name: 'João Silva',
+                    email: 'joao@exemplo.com',
+                    cpf: '12345678901',
+                    cep: '01234-567',
+                    phone: '+5511999999999',
+                    complement: null,
+                    number: '123',
+                    street: 'Rua Exemplo',
+                    city: 'São Paulo',
+                    state: 'SP',
+                    district: 'Centro',
+                    createdAt: new Date().toISOString(),
+                    updatedAt: new Date().toISOString()
+                },
+                createdAt: new Date().toISOString(),
+                updatedAt: new Date().toISOString(),
+                approvedAt: new Date().toISOString(),
+                refundedAt: null,
+                chargebackAt: null,
+                rejectedAt: null
+            };
+
+            processWebhookNotification(mockWebhookData);
+        }
+
+        // Expor funções para teste
+        window.simulateWebhookNotification = simulateWebhookNotification;
+        window.processWebhookNotification = processWebhookNotification;
+
+        // Log de inicialização
+        console.log('🔔 Webhook RushPay inicializado e pronto para receber notificações');
+        console.log('📋 Para testar, execute: simulateWebhookNotification() no console');
+    </script>
+</body>
+</html>

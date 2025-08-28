@@ -1,0 +1,44 @@
+<svg width="150" height="150" viewBox="0 0 150 150" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradiente para o fundo -->
+    <linearGradient id="backgroundGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#3b82f6;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#1d4ed8;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1e40af;stop-opacity:1" />
+    </linearGradient>
+    
+    <!-- Gradiente para sombra -->
+    <radialGradient id="shadowGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#000000;stop-opacity:0.1" />
+      <stop offset="100%" style="stop-color:#000000;stop-opacity:0.3" />
+    </radialGradient>
+  </defs>
+  
+  <!-- Círculo de fundo -->
+  <circle cx="75" cy="75" r="75" fill="url(#backgroundGrad)"/>
+  
+  <!-- Sombra sutil -->
+  <circle cx="75" cy="75" r="75" fill="url(#shadowGrad)"/>
+  
+  <!-- Cabeça da pessoa (mais realista) -->
+  <ellipse cx="75" cy="55" rx="22" ry="25" fill="#FFFFFF" opacity="0.95"/>
+  
+  <!-- Pescoço -->
+  <rect x="68" y="75" width="14" height="8" fill="#FFFFFF" opacity="0.95" rx="2"/>
+  
+  <!-- Ombros/corpo -->
+  <ellipse cx="75" cy="120" rx="35" ry="30" fill="#FFFFFF" opacity="0.95"/>
+  
+  <!-- Cortar a parte inferior para dar efeito de avatar -->
+  <rect x="0" y="130" width="150" height="20" fill="url(#backgroundGrad)"/>
+  
+  <!-- Detalhes do rosto (olhos) -->
+  <circle cx="68" cy="50" r="2" fill="url(#backgroundGrad)" opacity="0.7"/>
+  <circle cx="82" cy="50" r="2" fill="url(#backgroundGrad)" opacity="0.7"/>
+  
+  <!-- Boca sutil -->
+  <ellipse cx="75" cy="62" rx="3" ry="1.5" fill="url(#backgroundGrad)" opacity="0.5"/>
+  
+  <!-- Borda externa sutil -->
+  <circle cx="75" cy="75" r="74" fill="none" stroke="#FFFFFF" stroke-width="1" opacity="0.2"/>
+</svg>
