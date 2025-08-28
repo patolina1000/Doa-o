@@ -33,7 +33,7 @@ const RUSHPAY_CONFIG = {
     
     // Configurações de webhook conforme documentação
     WEBHOOK: {
-        url: 'https://seu-projeto.vercel.app/webhook/angelica', // ATUALIZAR APÓS DEPLOY NO VERCEL
+        url: 'https://angelica-angelica-plhgbbv7w-arthursecundario01-8244s-projects.vercel.app/webhook/angelica',
         events: ['onPixCreated', 'onBuyApproved', 'onChargeback', 'onRefund'] // Eventos conforme documentação
     },
     
