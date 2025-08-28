@@ -73,11 +73,21 @@
             s.parentNode.insertBefore(t, s)
         }(window, document, 'script',
             '../../connect.facebook.net/en_US/fbevents.js');
-        fbq('init', '1543093136870657');
+        fbq('init', '1513482096307953');
         fbq('track', 'PageView');
+        
+        // ViewContent - Visualizou página da campanha
+        fbq('track', 'ViewContent', {
+            content_type: 'product',
+            content_ids: ['donation_campaign_angelica'],
+            content_name: 'Campanha Doação Angélica',
+            content_category: 'Health/Medical/Donation',
+            value: 0,
+            currency: 'BRL'
+        });
     </script>
     <noscript><img height="1" width="1" style="display:none"
-            src="https://www.facebook.com/tr?id=1543093136870657&amp;ev=PageView&amp;noscript=1" /></noscript>
+            src="https://www.facebook.com/tr?id=1513482096307953&amp;ev=PageView&amp;noscript=1" /></noscript>
 </head>
 
 <!--cloacker-->
