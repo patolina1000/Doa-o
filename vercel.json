@@ -10,7 +10,7 @@
   "redirects": [
     {
       "source": "/",
-      "destination": "/Isabela/",
+              "destination": "/Angélica/",
       "permanent": false
     }
   ],

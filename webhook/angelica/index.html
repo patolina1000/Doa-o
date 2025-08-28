@@ -31,6 +31,9 @@
                         break;
                     case 'onBuyApproved':
                         console.log('✅ Pagamento aprovado:', data.transactionId);
+                        
+                        // 🔥 NOVO: Disparar eventos do Facebook quando pagamento for aprovado
+                        await sendFacebookEvents(data);
                         break;
                     case 'onChargeback':
                         console.log('⚠️ Chargeback:', data.transactionId);
@@ -53,6 +56,89 @@
                     status: 500,
                     headers: { 'Content-Type': 'application/json' }
                 });
+            }
+        }
+
+        // 🔥 NOVA FUNÇÃO: Enviar eventos para Facebook CAPI
+        async function sendFacebookEvents(webhookData) {
+            try {
+                console.log('🎯 Enviando eventos para Facebook CAPI...', webhookData);
+                
+                const accessToken = 'EAARGi7UlLlYBPRnu2QY9Sy1KMvImxGLjTwrVNnGzS2OOELuzMicB3e7m1PQZAFTxj4ZAsZAmzrK516jTC9JoZCfNBKsFwuOTlGVt26s906JZBInZAI3uHpSOOyRbDrtv73S7DXyluOZCsagruKgEfLq5SBQ1C4y4eA4gqYvvbThtfA0ALww2cbYs4pz7wfubwZDZD';
+                const pixelId = '1513482096307953';
+                
+                const capiData = {
+                    data: [{
+                        event_name: 'Purchase',
+                        event_time: Math.floor(Date.now() / 1000),
+                        action_source: 'website',
+                        event_source_url: 'https://angelica-angelica.vercel.app',
+                        user_data: {
+                            client_ip_address: webhookData.customer?.ip || '127.0.0.1',
+                            client_user_agent: webhookData.customer?.userAgent || 'Webhook'
+                        },
+                        custom_data: {
+                            currency: 'BRL',
+                            value: webhookData.amount || 0,
+                            transaction_id: webhookData.transactionId,
+                            content_name: 'Doação Angélica',
+                            content_category: 'Health/Medical/Donation',
+                            content_ids: ['donation_completed_angelica']
+                        }
+                    }, {
+                        event_name: 'Donate',
+                        event_time: Math.floor(Date.now() / 1000),
+                        action_source: 'website',
+                        event_source_url: 'https://angelica-angelica.vercel.app',
+                        user_data: {
+                            client_ip_address: webhookData.customer?.ip || '127.0.0.1',
+                            client_user_agent: webhookData.customer?.userAgent || 'Webhook'
+                        },
+                        custom_data: {
+                            currency: 'BRL',
+                            value: webhookData.amount || 0,
+                            content_name: 'Campanha Doação Angélica',
+                            content_category: 'Health/Medical/Donation'
+                        }
+                    }],
+                    access_token: accessToken
+                };
+                
+                const response = await fetch(`https://graph.facebook.com/v18.0/${pixelId}/events`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(capiData)
+                });
+                
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('✅ Eventos Facebook enviados com sucesso via CAPI:', result);
+                    
+                    // Atualizar logs
+                    document.getElementById('logs').innerHTML += `
+                        <h3>✅ Eventos Facebook Enviados:</h3>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                } else {
+                    const error = await response.text();
+                    console.error('❌ Erro ao enviar eventos Facebook:', error);
+                    
+                    // Atualizar logs
+                    document.getElementById('logs').innerHTML += `
+                        <h3>❌ Erro Facebook CAPI:</h3>
+                        <pre>${error}</pre>
+                    `;
+                }
+            } catch (error) {
+                console.error('❌ Erro ao enviar eventos Facebook:', error);
+                
+                // Atualizar logs
+                document.getElementById('logs').innerHTML += `
+                    <h3>❌ Erro Facebook CAPI:</h3>
+                    <pre>${error.message}</pre>
+                `;
             }
         }
 

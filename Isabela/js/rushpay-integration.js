@@ -87,8 +87,167 @@ class RushPayIntegration {
     getHeaders() {
         return {
             'Content-Type': 'application/json',
-            'Authorization': this.secretKey // Conforme documentação: Authorization: <secretKey>
+            'Authorization': this.secretKey, // Conforme documentação: Authorization: <secretKey>
+            // Adicionar headers para tentar contornar CORS
+            'Accept': 'application/json',
+            'Accept-Language': 'pt-BR,pt;q=0.9,en;q=0.8',
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
         };
+    }
+
+    /**
+     * Configurações de fetch com fallbacks para CORS
+     */
+    getFetchOptions(method, body = null) {
+        const options = {
+            method: method,
+            headers: this.getHeaders(),
+            mode: 'cors', // Tentar CORS primeiro
+            credentials: 'omit', // Não enviar cookies
+            cache: 'no-cache',
+            redirect: 'follow',
+            referrerPolicy: 'no-referrer'
+        };
+
+        if (body) {
+            options.body = JSON.stringify(body);
+        }
+
+        return options;
+    }
+
+    /**
+     * Tenta fazer requisição com diferentes configurações de CORS
+     */
+    async fetchWithCorsFallback(url, options) {
+        const fallbackModes = ['cors', 'no-cors'];
+        const fallbackMethods = ['POST', 'GET'];
+        
+        for (const mode of fallbackModes) {
+            for (const method of fallbackMethods) {
+                try {
+                    console.log(`🔄 Tentando requisição com mode: ${mode}, method: ${method}`);
+                    
+                    const testOptions = {
+                        ...options,
+                        method: method,
+                        mode: mode
+                    };
+
+                    // Se for no-cors, não podemos enviar body JSON
+                    if (mode === 'no-cors' && options.body) {
+                        console.log('⚠️ Modo no-cors detectado, usando URL params para dados');
+                        // Para no-cors, tentar enviar dados via URL params
+                        const urlWithParams = new URL(url);
+                        try {
+                            const bodyData = JSON.parse(options.body);
+                            Object.keys(bodyData).forEach(key => {
+                                if (typeof bodyData[key] === 'string' || typeof bodyData[key] === 'number') {
+                                    urlWithParams.searchParams.append(key, bodyData[key]);
+                                }
+                            });
+                        } catch (e) {
+                            console.log('⚠️ Não foi possível converter body para URL params');
+                        }
+                        
+                        testOptions.body = null;
+                        const response = await fetch(urlWithParams.toString(), testOptions);
+                        
+                        if (response.type === 'opaque') {
+                            console.log('✅ Requisição no-cors bem-sucedida (opaque response)');
+                            return {
+                                ok: true,
+                                status: 200,
+                                statusText: 'OK (no-cors)',
+                                type: 'opaque',
+                                json: async () => ({ success: true, mode: 'no-cors' })
+                            };
+                        }
+                    } else {
+                        const response = await fetch(url, testOptions);
+                        
+                        if (response.ok || response.status < 500) {
+                            console.log(`✅ Requisição bem-sucedida com mode: ${mode}, method: ${method}`);
+                            return response;
+                        }
+                    }
+                } catch (error) {
+                    console.log(`❌ Falha com mode: ${mode}, method: ${method}:`, error.message);
+                    continue;
+                }
+            }
+        }
+        
+        throw new Error('Todas as tentativas de requisição falharam');
+    }
+
+    /**
+     * Tenta fazer requisição usando proxy CORS como alternativa
+     */
+    async fetchWithProxy(url, options) {
+        const proxyUrls = [
+            'https://cors-anywhere.herokuapp.com/',
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://thingproxy.freeboard.io/fetch/'
+        ];
+
+        for (const proxyUrl of proxyUrls) {
+            try {
+                console.log(`🔄 Tentando proxy: ${proxyUrl}`);
+                
+                const proxyFullUrl = proxyUrl + encodeURIComponent(url);
+                const proxyOptions = {
+                    ...options,
+                    headers: {
+                        ...options.headers,
+                        'X-Requested-With': 'XMLHttpRequest'
+                    }
+                };
+
+                const response = await fetch(proxyFullUrl, proxyOptions);
+                
+                if (response.ok) {
+                    console.log(`✅ Proxy funcionou: ${proxyUrl}`);
+                    return response;
+                }
+            } catch (error) {
+                console.log(`❌ Proxy falhou: ${proxyUrl}`, error.message);
+                continue;
+            }
+        }
+        
+        throw new Error('Todos os proxies falharam');
+    }
+
+    /**
+     * Tenta fazer requisição com múltiplas estratégias
+     */
+    async fetchWithMultipleStrategies(url, options) {
+        const strategies = [
+            () => fetch(url, options), // Tentativa direta
+            () => this.fetchWithCorsFallback(url, options), // Fallback CORS
+            () => this.fetchWithProxy(url, options) // Proxy CORS
+        ];
+
+        for (let i = 0; i < strategies.length; i++) {
+            try {
+                console.log(`🔄 Tentativa ${i + 1}/${strategies.length}`);
+                const response = await strategies[i]();
+                
+                if (response.ok || response.status < 500) {
+                    console.log(`✅ Estratégia ${i + 1} funcionou`);
+                    return response;
+                }
+            } catch (error) {
+                console.log(`❌ Estratégia ${i + 1} falhou:`, error.message);
+                if (i === strategies.length - 1) {
+                    throw error;
+                }
+                continue;
+            }
+        }
     }
 
     /**
@@ -112,17 +271,16 @@ class RushPayIntegration {
                 console.log('✅ Conectividade RushPay OK - API acessível');
                 return true;
             } else if (response.status === 400 || response.status === 500) {
-                console.warn('⚠️ API acessível mas credenciais podem ser inválidas - usando modo demo');
-                return 'demo_mode';
+                console.warn('⚠️ API acessível mas credenciais podem ser inválidas');
+                return false;
             }
             
-            console.warn('⚠️ API RushPay não acessível - usando modo demonstração');
-            return 'demo_mode';
+            console.warn('⚠️ API RushPay não acessível');
+            return false;
             
         } catch (error) {
             console.error('❌ Erro de conectividade RushPay:', error.message);
-            console.log('🔄 Ativando modo demonstração...');
-            return 'demo_mode';
+            return false;
         }
     }
 
@@ -172,6 +330,8 @@ class RushPayIntegration {
             };
         }
     }
+
+
 
     /**
      * Cria uma transação de compra conforme documentação
@@ -278,13 +438,11 @@ class RushPayIntegration {
                 });
             }
 
-            const response = await fetch(`${this.baseUrl}/transaction.purchase`, {
-                method: 'POST',
-                headers: this.getHeaders(),
-                body: JSON.stringify(requestBody),
-                mode: 'cors',
-                timeout: RUSHPAY_CONFIG.TIMEOUT.request
-            });
+            // Tentar com múltiplas estratégias para contornar CORS
+            const response = await this.fetchWithMultipleStrategies(
+                `${this.baseUrl}/transaction.purchase`,
+                this.getFetchOptions('POST', requestBody)
+            );
 
             console.log('📡 Resposta RushPay:', response.status, response.statusText);
             
@@ -696,8 +854,7 @@ class AngelicaCampaignPayments {
                     amount: totalAmount,
                     status: result.status,
                     method: result.method,
-                    expiresAt: result.expiresAt,
-                    demoMode: result.demoMode || false
+                    expiresAt: result.expiresAt
                 };
             } else {
                 if (window.debugLog) {

@@ -13,7 +13,7 @@ Sistema de doações integrado com RushPay API para processamento de pagamentos 
 
 ```
 ajudconosco.site/
-├── Isabela/                 # Páginas principais
+├── Angélica/                 # Páginas principais
 │   ├── index.html          # Página inicial
 │   ├── obrigado.html       # Página de doação
 │   ├── js/                 # Scripts JavaScript
@@ -31,7 +31,7 @@ ajudconosco.site/
 ## ⚙️ Configuração
 
 ### 1. Credenciais RushPay
-Configure suas chaves API no arquivo `Isabela/js/rushpay-config.js`:
+Configure suas chaves API no arquivo `Angélica/js/rushpay-config.js`:
 
 ```javascript
 const RUSHPAY_CONFIG = {
@@ -43,7 +43,7 @@ const RUSHPAY_CONFIG = {
 ```
 
 ### 2. Webhook URL
-Após o deploy no Vercel, atualize a URL do webhook no arquivo `Isabela/js/rushpay-config.js`:
+Após o deploy no Vercel, atualize a URL do webhook no arquivo `Angélica/js/rushpay-config.js`:
 
 ```javascript
 WEBHOOK: {
@@ -72,8 +72,8 @@ WEBHOOK: {
 
 ### URLs de Teste
 ```
-✅ Página Principal: https://seu-projeto.vercel.app/Isabela/
-✅ Página de Doação: https://seu-projeto.vercel.app/Isabela/obrigado.html
+✅ Página Principal: https://seu-projeto.vercel.app/Angélica/
+✅ Página de Doação: https://seu-projeto.vercel.app/Angélica/obrigado.html
 ✅ Webhook: https://seu-projeto.vercel.app/webhook/angelica/
 ```
 

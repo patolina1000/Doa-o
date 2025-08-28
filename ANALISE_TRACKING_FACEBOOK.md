@@ -9,7 +9,7 @@ Após análise detalhada do seu projeto, identifiquei uma implementação **DUPL
 ## 📋 **SISTEMAS DE TRACKING IDENTIFICADOS**
 
 ### 1. **FACEBOOK PIXEL NATIVO** ✅
-**Localização:** `ajudconosco.site/Isabela/index.html` (linhas 64-80)
+**Localização:** `ajudconosco.site/Angélica/index.html` (linhas 64-80)
 
 ```javascript
 // Facebook Pixel ID: 1543093136870657
@@ -23,7 +23,7 @@ fbq('track', 'PageView');
 - Noscript fallback implementado
 
 ### 2. **UTMIFY PIXEL** ⚠️
-**Localização:** `ajudconosco.site/Isabela/index.html` (linhas 31-39)
+**Localização:** `ajudconosco.site/Angélica/index.html` (linhas 31-39)
 
 ```javascript
 // UTMify Pixel ID: 68a7fba0a263826ac0752c26
@@ -36,7 +36,7 @@ window.pixelId = "68a7fba0a263826ac0752c26";
 - Pode afetar performance e confiabilidade
 
 ### 3. **SISTEMA UTM TRACKING** ✅
-**Localização:** `ajudconosco.site/Isabela/js/YUYkizPjrZ27.js` (linhas 132-141)
+**Localização:** `ajudconosco.site/Angélica/js/YUYkizPjrZ27.js` (linhas 132-141)
 
 ```javascript
 function getTrackingParams() {
@@ -287,7 +287,7 @@ fbq('track', 'ViewContent', {
 
 ### **1. Teste do Pixel:**
 1. Instale Facebook Pixel Helper (extensão Chrome)
-2. Acesse: `https://angelica-angelica.vercel.app/Isabela/`
+2. Acesse: `https://angelica-angelica.vercel.app/Angélica/`
 3. Verifique se dispara PageView
 
 ### **2. Teste de Conversões:**

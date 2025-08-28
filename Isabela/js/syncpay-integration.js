@@ -195,7 +195,7 @@ class SyncPayIntegration {
                     expiresInDays: 1
                 },
                 postbackUrl: paymentData.webhookUrl || window.location.origin + '/webhook',
-                metadata: `Doação para Isabela - ID: 4452341 - Valor: R$ ${paymentData.amount.toFixed(2)}`,
+                metadata: `Doação para Angélica - ID: 4452341 - Valor: R$ ${paymentData.amount.toFixed(2)}`,
                 traceable: true
             };
 
@@ -318,16 +318,16 @@ class SyncPayIntegration {
 }
 
 /**
- * Classe para gerenciar pagamentos da campanha Isabela
+ * Classe para gerenciar pagamentos da campanha Angélica
  */
-class IsabelaCampaignPayments {
+class AngelicaCampaignPayments {
     constructor() {
         // Usar configurações do arquivo de config
         const config = getSyncPayConfig();
         this.syncPay = new SyncPayIntegration(config.CLIENT_ID, config.CLIENT_SECRET, config.SANDBOX);
         this.currentTransaction = null;
         
-        console.log('🏗️ IsabelaCampaignPayments inicializado', {
+        console.log('🏗️ AngelicaCampaignPayments inicializado', {
             sandbox: config.SANDBOX,
             hasCredentials: !!(config.CLIENT_ID && config.CLIENT_SECRET)
         });
@@ -351,7 +351,7 @@ class IsabelaCampaignPayments {
             const paymentData = {
                 amount: totalAmount,
                 customer: customerData,
-                webhookUrl: window.location.origin + '/webhook/isabela',
+                webhookUrl: window.location.origin + '/webhook/angelica',
                 split: this.prepareSplit(baseAmount, selectedAddons)
             };
 
@@ -447,10 +447,10 @@ class IsabelaCampaignPayments {
         const timestamp = Date.now().toString();
         const randomSuffix = Math.random().toString(36).substr(2, 4).toUpperCase();
         
-        return `00020126820014br.gov.bcb.pix2563pix.syncpay.pro/qr/v3/at/${transactionId}520400005303986540${amount.toFixed(2).padStart(10, '0')}5802BR5925ISABELA CAMPANHA SAUDE6014SAO_BERNARDO_D62070503***6304${randomSuffix}`;
+        return `00020126820014br.gov.bcb.pix2563pix.syncpay.pro/qr/v3/at/${transactionId}520400005303986540${amount.toFixed(2).padStart(10, '0')}5802BR5925ANGELICA CAMPANHA SAUDE6014SAO_BERNARDO_D62070503***6304${randomSuffix}`;
     }
 }
 
 // Exportar para uso global
-window.IsabelaCampaignPayments = IsabelaCampaignPayments;
+window.AngelicaCampaignPayments = AngelicaCampaignPayments;
 window.SyncPayIntegration = SyncPayIntegration;

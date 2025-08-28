@@ -4,7 +4,7 @@
 
 ### 1. **CORRIGIR URL DO WEBHOOK** ✅ **CORRIGIDO**
 
-**Arquivo:** `ajudconosco.site/Isabela/js/rushpay-config.js`
+**Arquivo:** `ajudconosco.site/Angélica/js/rushpay-config.js`
 **Linha 36:**
 
 ```javascript
@@ -16,7 +16,7 @@ url: 'https://angelica-angelica.vercel.app/webhook/angelica',
 
 ### 2. **VERIFICAR CREDENCIAIS DA RUSHPAY** 🔴 **CRÍTICO**
 
-**Arquivo:** `ajudconosco.site/Isabela/js/rushpay-config.js`
+**Arquivo:** `ajudconosco.site/Angélica/js/rushpay-config.js`
 **Linhas 16-17:**
 
 ```javascript
@@ -72,7 +72,7 @@ Se você quiser usar um domínio próprio:
 ## 🧪 COMO TESTAR APÓS O DEPLOY
 
 ### 1. **Teste Básico**
-- Acesse: `https://angelica-angelica.vercel.app/Isabela/`
+- Acesse: `https://angelica-angelica.vercel.app/Angélica/`
 - Verifique se a página carrega corretamente
 
 ### 2. **Teste de Pagamento**
@@ -86,7 +86,7 @@ Se você quiser usar um domínio próprio:
 - Deve mostrar a página de webhook
 
 ### 4. **Teste Completo**
-- Use o arquivo: `Isabela/test-rushpay-fixed.html`
+- Use o arquivo: `Angélica/test-rushpay-fixed.html`
 - Execute todos os testes
 - Verifique se não há erros
 

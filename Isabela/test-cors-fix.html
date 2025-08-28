@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Correções CORS - RushPay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .test-section h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        .status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .status.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .status.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .status.warning {
+            background-color: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+        .status.info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        button:disabled {
+            background-color: #6c757d;
+            cursor: not-allowed;
+        }
+        .log {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px 0;
+            max-height: 300px;
+            overflow-y: auto;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .config-info {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .strategy-test {
+            margin: 10px 0;
+            padding: 10px;
+            border-left: 4px solid #007bff;
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste de Correções CORS - RushPay</h1>
+        <p>Este teste verifica se as correções implementadas para resolver os problemas de CORS estão funcionando corretamente.</p>
+
+        <div class="test-section">
+            <h3>📋 Configuração Atual</h3>
+            <div class="config-info" id="configInfo">
+                Carregando configuração...
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔧 Testes Disponíveis</h3>
+            <button onclick="testConfiguration()">1. Testar Configuração</button>
+            <button onclick="testConnectivity()">2. Testar Conectividade</button>
+            <button onclick="testCorsStrategies()">3. Testar Estratégias CORS</button>
+            <button onclick="testTransaction()">4. Testar Transação</button>
+            
+            <button onclick="runAllTests()">🚀 Executar Todos os Testes</button>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 Resultados dos Testes</h3>
+            <div id="testResults">
+                <div class="status info">Aguardando execução dos testes...</div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 Logs Detalhados</h3>
+            <div class="log" id="testLog"></div>
+        </div>
+    </div>
+
+    <!-- Carregar scripts necessários -->
+    <script src="js/rushpay-config.js"></script>
+    <script src="js/rushpay-integration.js"></script>
+
+    <script>
+        let testResults = [];
+        let rushPayIntegration;
+        let campaignPayments;
+
+        // Função para adicionar logs
+        function addLog(message, type = 'info') {
+            const logDiv = document.getElementById('testLog');
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `<span style="color: #666;">[${timestamp}]</span> ${message}`;
+            logDiv.appendChild(logEntry);
+            logDiv.scrollTop = logDiv.scrollHeight;
+            console.log(`[${type.toUpperCase()}] ${message}`);
+        }
+
+        // Função para adicionar resultado
+        function addResult(title, message, type = 'info') {
+            const resultsDiv = document.getElementById('testResults');
+            const resultDiv = document.createElement('div');
+            resultDiv.className = `status ${type}`;
+            resultDiv.innerHTML = `<strong>${title}:</strong> ${message}`;
+            resultsDiv.appendChild(resultDiv);
+        }
+
+        // Função para limpar resultados
+        function clearResults() {
+            document.getElementById('testResults').innerHTML = '';
+            document.getElementById('testLog').innerHTML = '';
+            testResults = [];
+        }
+
+        // Teste 1: Configuração
+        async function testConfiguration() {
+            addLog('🔍 Iniciando teste de configuração...', 'info');
+            
+            try {
+                // Verificar se as configurações estão carregadas
+                if (typeof RUSHPAY_CONFIG === 'undefined') {
+                    throw new Error('RUSHPAY_CONFIG não encontrado');
+                }
+
+                // Verificar credenciais
+                const hasPublicKey = !!RUSHPAY_CONFIG.PUBLIC_KEY;
+                const hasSecretKey = !!RUSHPAY_CONFIG.SECRET_KEY;
+                const isProduction = !RUSHPAY_CONFIG.SANDBOX;
+
+                addLog(`✅ RUSHPAY_CONFIG carregado`, 'success');
+                addLog(`📋 Public Key: ${hasPublicKey ? '✅ Configurada' : '❌ Não configurada'}`, hasPublicKey ? 'success' : 'error');
+                addLog(`📋 Secret Key: ${hasSecretKey ? '✅ Configurada' : '❌ Não configurada'}`, hasSecretKey ? 'success' : 'error');
+                addLog(`🌐 Modo: ${isProduction ? 'Produção' : 'Sandbox'}`, 'info');
+
+                // Atualizar informações de configuração
+                document.getElementById('configInfo').innerHTML = `
+                    <strong>URL da API:</strong> ${RUSHPAY_CONFIG.PRODUCTION_URL}<br>
+                    <strong>Public Key:</strong> ${RUSHPAY_CONFIG.PUBLIC_KEY ? RUSHPAY_CONFIG.PUBLIC_KEY.substring(0, 8) + '...' : 'Não configurada'}<br>
+                    <strong>Secret Key:</strong> ${RUSHPAY_CONFIG.SECRET_KEY ? RUSHPAY_CONFIG.SECRET_KEY.substring(0, 8) + '...' : 'Não configurada'}<br>
+                    <strong>Modo:</strong> ${isProduction ? 'Produção' : 'Sandbox'}<br>
+                    <strong>Webhook:</strong> ${RUSHPAY_CONFIG.WEBHOOK.url}
+                `;
+
+                if (hasPublicKey && hasSecretKey) {
+                    addResult('Configuração', '✅ Todas as configurações estão corretas', 'success');
+                } else {
+                    addResult('Configuração', '❌ Credenciais não configuradas', 'error');
+                }
+
+            } catch (error) {
+                addLog(`❌ Erro no teste de configuração: ${error.message}`, 'error');
+                addResult('Configuração', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        // Teste 2: Conectividade
+        async function testConnectivity() {
+            addLog('🌐 Iniciando teste de conectividade...', 'info');
+            
+            try {
+                if (!rushPayIntegration) {
+                    rushPayIntegration = new RushPayIntegration(
+                        RUSHPAY_CONFIG.PUBLIC_KEY,
+                        RUSHPAY_CONFIG.SECRET_KEY,
+                        RUSHPAY_CONFIG.SANDBOX
+                    );
+                }
+
+                const result = await rushPayIntegration.testConnectivity();
+                
+                if (result === true) {
+                    addLog('✅ API acessível diretamente', 'success');
+                    addResult('Conectividade', '✅ API acessível', 'success');
+                } else {
+                    addLog('❌ API não acessível', 'error');
+                    addResult('Conectividade', '❌ API não acessível', 'error');
+                }
+
+            } catch (error) {
+                addLog(`❌ Erro no teste de conectividade: ${error.message}`, 'error');
+                addResult('Conectividade', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        // Teste 3: Estratégias CORS
+        async function testCorsStrategies() {
+            addLog('🔄 Iniciando teste de estratégias CORS...', 'info');
+            
+            try {
+                if (!rushPayIntegration) {
+                    rushPayIntegration = new RushPayIntegration(
+                        RUSHPAY_CONFIG.PUBLIC_KEY,
+                        RUSHPAY_CONFIG.SECRET_KEY,
+                        RUSHPAY_CONFIG.SANDBOX
+                    );
+                }
+
+                const testUrl = `${rushPayIntegration.baseUrl}/transaction.getPayment?id=test`;
+                const options = rushPayIntegration.getFetchOptions('GET');
+
+                addLog('📡 Testando estratégia 1: Requisição direta', 'info');
+                try {
+                    const response1 = await fetch(testUrl, options);
+                    addLog(`✅ Estratégia 1 funcionou: ${response1.status}`, 'success');
+                    addResult('Estratégia 1 (Direta)', '✅ Funcionou', 'success');
+                } catch (error) {
+                    addLog(`❌ Estratégia 1 falhou: ${error.message}`, 'error');
+                    addResult('Estratégia 1 (Direta)', '❌ Falhou', 'error');
+                }
+
+                addLog('📡 Testando estratégia 2: Fallback CORS', 'info');
+                try {
+                    const response2 = await rushPayIntegration.fetchWithCorsFallback(testUrl, options);
+                    addLog(`✅ Estratégia 2 funcionou: ${response2.status}`, 'success');
+                    addResult('Estratégia 2 (Fallback CORS)', '✅ Funcionou', 'success');
+                } catch (error) {
+                    addLog(`❌ Estratégia 2 falhou: ${error.message}`, 'error');
+                    addResult('Estratégia 2 (Fallback CORS)', '❌ Falhou', 'error');
+                }
+
+                addLog('📡 Testando estratégia 3: Proxy CORS', 'info');
+                try {
+                    const response3 = await rushPayIntegration.fetchWithProxy(testUrl, options);
+                    addLog(`✅ Estratégia 3 funcionou: ${response3.status}`, 'success');
+                    addResult('Estratégia 3 (Proxy CORS)', '✅ Funcionou', 'success');
+                } catch (error) {
+                    addLog(`❌ Estratégia 3 falhou: ${error.message}`, 'error');
+                    addResult('Estratégia 3 (Proxy CORS)', '❌ Falhou', 'error');
+                }
+
+            } catch (error) {
+                addLog(`❌ Erro no teste de estratégias CORS: ${error.message}`, 'error');
+                addResult('Estratégias CORS', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+        // Teste 4: Transação
+        async function testTransaction() {
+            addLog('💳 Iniciando teste de transação...', 'info');
+            
+            try {
+                if (!campaignPayments) {
+                    campaignPayments = new AngelicaCampaignPayments();
+                }
+
+                const testData = {
+                    baseAmount: 10.00,
+                    selectedAddons: [
+                        { value: 5.00, name: 'Teste Add-on', id: 'test' }
+                    ],
+                    customerData: {
+                        name: 'Teste Usuário',
+                        email: 'teste@exemplo.com'
+                    }
+                };
+
+                addLog('📤 Enviando transação de teste...', 'info');
+                const result = await campaignPayments.processDonation(
+                    testData.baseAmount,
+                    testData.selectedAddons,
+                    testData.customerData
+                );
+
+                if (result.success) {
+                    addLog(`✅ Transação criada com sucesso!`, 'success');
+                    addLog(`📋 ID: ${result.transactionId}`, 'info');
+                    addLog(`💰 Valor: R$ ${result.amount}`, 'info');
+                    addLog(`📱 Status: ${result.status}`, 'info');
+                    
+                    addResult('Transação', '✅ Criada com sucesso', 'success');
+                } else {
+                    addLog(`❌ Falha na transação: ${result.error}`, 'error');
+                    addResult('Transação', `❌ Falha: ${result.error}`, 'error');
+                }
+
+            } catch (error) {
+                addLog(`❌ Erro no teste de transação: ${error.message}`, 'error');
+                addResult('Transação', `❌ Erro: ${error.message}`, 'error');
+            }
+        }
+
+
+
+        // Executar todos os testes
+        async function runAllTests() {
+            addLog('🚀 Iniciando execução de todos os testes...', 'info');
+            clearResults();
+            
+            await testConfiguration();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testConnectivity();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testCorsStrategies();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            
+            await testTransaction();
+            
+            addLog('✅ Todos os testes concluídos!', 'success');
+        }
+
+        // Inicialização
+        window.addEventListener('load', function() {
+            addLog('🚀 Sistema de teste carregado', 'info');
+            addLog('📋 Carregando configurações...', 'info');
+            
+            // Verificar se os scripts foram carregados
+            if (typeof RUSHPAY_CONFIG !== 'undefined') {
+                addLog('✅ RUSHPAY_CONFIG carregado', 'success');
+            } else {
+                addLog('❌ RUSHPAY_CONFIG não encontrado', 'error');
+            }
+            
+            if (typeof RushPayIntegration !== 'undefined') {
+                addLog('✅ RushPayIntegration carregado', 'success');
+            } else {
+                addLog('❌ RushPayIntegration não encontrado', 'error');
+            }
+            
+            if (typeof AngelicaCampaignPayments !== 'undefined') {
+                addLog('✅ AngelicaCampaignPayments carregado', 'success');
+            } else {
+                addLog('❌ AngelicaCampaignPayments não encontrado', 'error');
+            }
+        });
+    </script>
+</body>
+</html>
+    

@@ -24,16 +24,16 @@ const SYNCPAY_CONFIG = {
     
     // Configurações da campanha
     CAMPAIGN: {
-        name: 'Ajude Isabela nessa jornada tão difícil',
+        name: 'Ajude Angélica nessa jornada tão difícil',
         id: '4452341',
-        description: 'Campanha para ajudar Isabela no tratamento de saúde',
-        beneficiary: 'ISABELA CAMPANHA SAUDE',
+        description: 'Campanha para ajudar Angélica no tratamento de saúde',
+        beneficiary: 'ANGELICA CAMPANHA SAUDE',
         minAmount: 20.00
     },
     
     // Configurações de webhook
     WEBHOOK: {
-        url: window.location.origin + '/webhook/isabela',
+        url: window.location.origin + '/webhook/angelica',
         events: ['payment.approved', 'payment.cancelled', 'payment.refunded']
     },
     
@@ -65,7 +65,7 @@ const SYNCPAY_CONFIG = {
     // Configurações PIX
     PIX: {
         expirationDays: 1,
-        description: 'Doação para campanha Isabela'
+        description: 'Doação para campanha Angélica'
     }
 };
 
