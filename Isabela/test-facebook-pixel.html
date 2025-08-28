@@ -198,16 +198,25 @@
             
             if (typeof window.fbPixelManager !== 'undefined') {
                 const success = window.fbPixelManager.trackAddPaymentInfo(25.00, {
-                    payment_method: 'PIX'
+                    payment_method: 'PIX',
+                    source: 'test-button'
                 });
                 
                 if (success) {
-                    addLog('✅ AddPaymentInfo enviado (R$ 25,00)');
+                    addLog('✅ AddPaymentInfo enviado (R$ 25,00) via FacebookPixelManager');
                 } else {
-                    addLog('❌ Erro no AddPaymentInfo');
+                    addLog('❌ Erro no FacebookPixelManager');
                 }
+            } else if (typeof fbq !== 'undefined') {
+                fbq('track', 'AddPaymentInfo', {
+                    content_category: 'Health/Medical/Donation',
+                    value: 25.00,
+                    currency: 'BRL',
+                    payment_method: 'PIX'
+                });
+                addLog('✅ AddPaymentInfo enviado (R$ 25,00) via fbq direto');
             } else {
-                addLog('❌ FacebookPixelManager não disponível');
+                addLog('❌ Erro: Nenhum método disponível');
             }
         }
 

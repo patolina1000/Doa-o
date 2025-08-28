@@ -892,6 +892,31 @@
                 rawInput: value
             });
             
+            // Facebook Pixel - AddPaymentInfo quando valor é alterado
+            if (baseAmount > 0 && baseAmount !== oldValue) {
+                if (typeof window.fbPixelManager !== 'undefined') {
+                    window.fbPixelManager.trackAddPaymentInfo(baseAmount, {
+                        payment_method: 'PIX',
+                        source: 'amount-input-change'
+                    });
+                    debugLog('🎯 Facebook Pixel: AddPaymentInfo disparado via manager', 'info', {
+                        value: baseAmount,
+                        source: 'amount-input-change'
+                    });
+                } else if (typeof fbq !== 'undefined') {
+                    fbq('track', 'AddPaymentInfo', {
+                        content_category: 'Health/Medical/Donation',
+                        value: baseAmount,
+                        currency: 'BRL',
+                        payment_method: 'PIX'
+                    });
+                    debugLog('🎯 Facebook Pixel: AddPaymentInfo disparado via fbq', 'info', {
+                        value: baseAmount,
+                        source: 'amount-input-change'
+                    });
+                }
+            }
+            
             updateTotals();
         });
 
@@ -959,6 +984,34 @@
             }
 
                          debugLog('✅ Valor mínimo atingido, iniciando processamento', 'success');
+
+            // Facebook Pixel - AddPaymentInfo quando clica CONTRIBUIR (valor final)
+            if (typeof window.fbPixelManager !== 'undefined') {
+                window.fbPixelManager.trackAddPaymentInfo(total, {
+                    payment_method: 'PIX',
+                    source: 'contribute-button-click',
+                    base_amount: baseAmount,
+                    addons_count: selectedAddons.size,
+                    addons_value: total - baseAmount
+                });
+                debugLog('🎯 Facebook Pixel: AddPaymentInfo final disparado via manager', 'info', {
+                    total: total,
+                    baseAmount: baseAmount,
+                    addonsValue: total - baseAmount,
+                    source: 'contribute-button-click'
+                });
+            } else if (typeof fbq !== 'undefined') {
+                fbq('track', 'AddPaymentInfo', {
+                    content_category: 'Health/Medical/Donation',
+                    value: total,
+                    currency: 'BRL',
+                    payment_method: 'PIX'
+                });
+                debugLog('🎯 Facebook Pixel: AddPaymentInfo final disparado via fbq', 'info', {
+                    total: total,
+                    source: 'contribute-button-click'
+                });
+            }
 
             // Desabilitar botão durante processamento
             this.disabled = true;
