@@ -7,6 +7,13 @@
       "use": "@vercel/static"
     }
   ],
+  "redirects": [
+    {
+      "source": "/",
+      "destination": "/Isabela/",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/webhook/angelica",
