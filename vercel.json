@@ -7,14 +7,10 @@
       "use": "@vercel/static"
     }
   ],
-  "routes": [
+  "rewrites": [
     {
-      "src": "/webhook/angelica",
-      "dest": "/webhook/angelica/index.html"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/$1"
+      "source": "/webhook/angelica",
+      "destination": "/webhook/angelica/index.html"
     }
   ],
   "headers": [
