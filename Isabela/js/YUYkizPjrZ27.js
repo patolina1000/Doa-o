@@ -171,6 +171,25 @@ jQuery(function($){
     });
 
     $('.btn-ajudar').click(function(){
+        // Tracking Facebook Pixel - InitiateCheckout
+        if (typeof window.fbPixelManager !== 'undefined') {
+            window.fbPixelManager.trackInitiateCheckout(0, {
+                content_name: 'Campanha Doação Angélica',
+                source: 'btn-ajudar-click'
+            });
+            console.log('🎯 Facebook Pixel: InitiateCheckout disparado');
+        } else if (typeof fbq !== 'undefined') {
+            // Fallback direto se o manager não estiver disponível
+            fbq('track', 'InitiateCheckout', {
+                content_category: 'Health/Medical/Donation',
+                content_name: 'Campanha Doação Angélica',
+                content_ids: ['donation_form_angelica'],
+                value: 0,
+                currency: 'BRL'
+            });
+            console.log('🎯 Facebook Pixel: InitiateCheckout disparado (fallback)');
+        }
+        
         // Redirecionar para nossa página personalizada
         window.location.href = 'obrigado.html';    
     }); 
